@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1b3f9a">
+<title>毎日10分 英会話</title>
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="./icon-192.png">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<style>
+/* =====================================================================
+   見た目（CSS）
+   ===================================================================== */
+:root {
+  --blue: #2b6cf6; --navy: #1b3f9a; --orange: #ff6b3d; --yellow: #ffd54a;
+  --green: #22a06b; --red: #e0453b;
+  --bg: #f3f6fc; --card: #ffffff; --text: #1d2433; --muted: #6b7385; --line: #e1e6f0;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; background: var(--bg); color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Noto Sans JP", sans-serif; font-size: 16px; }
+body { padding-bottom: env(safe-area-inset-bottom); }
+button { font-family: inherit; font-size: 1rem; cursor: pointer; border: none; border-radius: 12px; }
+.screen { display: none; max-width: 520px; margin: 0 auto; padding: 0 16px 40px; min-height: 100vh; }
+.screen.show { display: block; }
+
+.top { display: flex; align-items: center; gap: 10px; padding: 14px 0 10px; position: sticky; top: 0; background: var(--bg); z-index: 5; }
+.top h1 { font-size: 1.15rem; margin: 0; flex: 1; }
+.back { background: none; font-size: 1.4rem; padding: 4px 8px; color: var(--navy); }
+.iconbtn { background: var(--card); border: 1px solid var(--line); padding: 8px 12px; border-radius: 10px; }
+
+/* ホーム */
+.hero { background: linear-gradient(135deg, var(--blue), var(--navy)); color: #fff; border-radius: 20px; padding: 20px; margin-top: 8px; }
+.hero .title { font-size: 1.5rem; font-weight: 800; margin: 0 0 6px; }
+.hero .sub { opacity: .9; font-size: .92rem; margin: 0 0 14px; line-height: 1.5; }
+.stats { display: flex; gap: 8px; }
+.stat { flex: 1; background: rgba(255,255,255,.14); border-radius: 12px; padding: 10px 8px; text-align: center; }
+.stat b { display: block; font-size: 1.4rem; }
+.stat span { font-size: .75rem; opacity: .9; }
+.master { margin-top: 14px; background: rgba(255,255,255,.14); border-radius: 12px; padding: 10px 12px; font-size: .85rem; }
+.master .bar { height: 10px; background: rgba(255,255,255,.25); border-radius: 99px; overflow: hidden; margin-top: 6px; }
+.master .bar i { display: block; height: 100%; background: var(--yellow); }
+.bigbtn { display: block; width: 100%; margin-top: 14px; padding: 18px; font-size: 1.15rem; font-weight: 800;
+  background: var(--orange); color: #fff; border-radius: 16px; box-shadow: 0 6px 16px rgba(255,107,61,.35); }
+.bigbtn small { display: block; font-weight: 500; font-size: .85rem; opacity: .95; margin-top: 4px; }
+.menu { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+.menu button { background: var(--card); border: 1px solid var(--line); padding: 14px 12px; text-align: left; border-radius: 16px; }
+.menu .ic { font-size: 1.5rem; display: block; margin-bottom: 4px; }
+.menu b { display: block; font-size: .98rem; }
+.menu span { font-size: .76rem; color: var(--muted); }
+.sect { font-size: .85rem; font-weight: 700; color: var(--muted); margin: 18px 0 0; }
+.howto { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; margin-top: 14px; font-size: .9rem; line-height: 1.6; }
+.howto h3 { margin: 0 0 6px; font-size: 1rem; }
+.howto ol { padding-left: 20px; margin: 0; }
+.ver { text-align: center; color: var(--muted); font-size: .75rem; margin-top: 16px; }
+
+/* ロードマップ */
+.road { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px 16px; margin-top: 14px; }
+.road h3 { margin: 0 0 8px; font-size: 1rem; }
+.lvl { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid var(--line); }
+.lvl:first-child { border-top: none; }
+.lvl .n { width: 34px; height: 34px; border-radius: 50%; background: #e8efff; color: var(--navy); font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: .9rem; flex-shrink: 0; }
+.lvl .n.done { background: var(--green); color: #fff; }
+.lvl .t { flex: 1; font-size: .9rem; min-width: 0; }
+.lvl .t small { display: block; color: var(--muted); font-size: .75rem; }
+.lvl .bar { width: 70px; height: 8px; background: #dfe5f1; border-radius: 99px; overflow: hidden; flex-shrink: 0; }
+.lvl .bar i { display: block; height: 100%; background: var(--blue); }
+
+/* カード */
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 20px; margin-top: 12px; }
+.chip { display: inline-block; font-size: .75rem; padding: 3px 10px; border-radius: 999px; background: #e8efff; color: var(--navy); font-weight: 700; }
+.chip.new { background: #fff1e8; color: #c2410c; }
+.chip.rev { background: #e6f7ef; color: #14724c; }
+.chip.lis { background: #f1e8ff; color: #6b21a8; }
+.jp { font-size: 1.15rem; margin: 14px 0 6px; line-height: 1.5; }
+.en { font-size: 1.5rem; font-weight: 800; color: var(--navy); line-height: 1.35; margin: 6px 0; }
+.en.hidden { filter: blur(9px); user-select: none; }
+.note { color: var(--muted); font-size: .85rem; margin-top: 8px; line-height: 1.5; }
+.row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.row button { flex: 1; padding: 14px 8px; font-weight: 700; }
+.b-blue { background: var(--blue); color: #fff; }
+.b-navy { background: var(--navy); color: #fff; }
+.b-light { background: #e8efff; color: var(--navy); }
+.b-gray { background: #eef0f5; color: var(--text); }
+.b-mic { background: var(--red); color: #fff; }
+.b-mic.listening { animation: pulse 1s infinite; }
+.b-green { background: var(--green); color: #fff; }
+.b-orange { background: var(--orange); color: #fff; }
+.b-yellow { background: var(--yellow); color: #4a3800; }
+@keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(224,69,59,.5)} 70%{box-shadow:0 0 0 14px rgba(224,69,59,0)} 100%{box-shadow:0 0 0 0 rgba(224,69,59,0)} }
+.result { margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: #f6f8fc; font-size: .95rem; line-height: 1.6; display: none; }
+.result.show { display: block; }
+.result .heard { color: var(--muted); font-size: .85rem; }
+.result .score { font-weight: 800; font-size: 1.2rem; }
+.w-ok { color: var(--green); font-weight: 700; }
+.w-ng { color: var(--red); font-weight: 700; text-decoration: underline; }
+.progress { height: 8px; background: #dfe5f1; border-radius: 99px; overflow: hidden; margin-top: 6px; }
+.progress i { display: block; height: 100%; background: var(--blue); transition: width .3s; }
+.choices { display: grid; gap: 8px; margin-top: 14px; }
+.choices button { background: #f6f8fc; border: 2px solid var(--line); padding: 14px; text-align: left; font-size: 1rem; }
+.choices button.ok { border-color: var(--green); background: #e6f7ef; }
+.choices button.ng { border-color: var(--red); background: #fdecea; }
+.bigear { font-size: 3rem; text-align: center; margin: 10px 0; }
+
+/* 一覧 */
+.list { margin-top: 10px; }
+.item { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+.item .txt { flex: 1; min-width: 0; }
+.item .e { font-weight: 700; color: var(--navy); }
+.item .j { font-size: .85rem; color: var(--muted); margin-top: 2px; }
+.item .mark { font-size: .8rem; width: 34px; text-align: center; flex-shrink: 0; }
+.item button { padding: 10px 12px; }
+.scene { display: flex; align-items: center; gap: 12px; }
+.scene .ic { font-size: 1.7rem; }
+.scene .cnt { font-size: .8rem; color: var(--muted); }
+.lvhead { font-size: .85rem; font-weight: 700; color: var(--navy); margin: 14px 0 6px; }
+.slot { background: var(--yellow); padding: 0 6px; border-radius: 6px; }
+
+/* 文法カード */
+.gram h3 { margin: 0 0 8px; font-size: 1.1rem; }
+.gram p { margin: 6px 0; line-height: 1.7; font-size: .95rem; }
+.gram .ex { background: #f6f8fc; border-radius: 10px; padding: 10px 12px; margin-top: 8px; cursor: pointer; }
+.gram .ex b { color: var(--navy); }
+.gram .ex span { display: block; color: var(--muted); font-size: .85rem; }
+
+/* AI会話 */
+.chat { display: flex; flex-direction: column; gap: 10px; padding: 10px 0 120px; }
+.msg { max-width: 88%; padding: 12px 14px; border-radius: 16px; line-height: 1.5; font-size: 1rem; }
+.msg.ai { background: var(--card); border: 1px solid var(--line); align-self: flex-start; border-bottom-left-radius: 4px; }
+.msg.me { background: var(--blue); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+.msg .jp2 { font-size: .85rem; color: var(--muted); margin-top: 6px; }
+.msg .hint { font-size: .85rem; margin-top: 8px; padding: 8px 10px; background: #fff8e1; border-radius: 10px; color: #5a4300; }
+.msg .fix { font-size: .85rem; margin-top: 6px; padding: 8px 10px; background: rgba(255,255,255,.18); border-radius: 10px; }
+.msg .sp { background: none; padding: 2px 6px; font-size: 1.1rem; }
+.chatbar { position: fixed; left: 0; right: 0; bottom: 0; background: var(--card); border-top: 1px solid var(--line); padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); }
+.chatbar .in { max-width: 520px; margin: 0 auto; display: flex; gap: 8px; }
+.chatbar input { flex: 1; padding: 12px; border: 1px solid var(--line); border-radius: 12px; font-size: 1rem; min-width: 0; }
+.chatbar button { padding: 12px 14px; font-weight: 700; }
+.thinking { color: var(--muted); font-size: .85rem; padding: 6px 12px; }
+.ans { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-top: 10px; line-height: 1.6; }
+.ans .q { color: var(--muted); font-size: .85rem; }
+.ans .a { font-size: 1.2rem; font-weight: 800; color: var(--navy); }
+.ans .alt { font-size: .95rem; margin-top: 4px; }
+.ans .memo { font-size: .85rem; color: var(--muted); margin-top: 6px; }
+
+/* 設定・フォーム */
+label.f { display: block; margin-top: 14px; font-weight: 700; font-size: .95rem; }
+select, input[type=text], input[type=password], textarea { width: 100%; padding: 12px; margin-top: 6px; border: 1px solid var(--line); border-radius: 12px; font-size: 1rem; background: #fff; font-family: inherit; }
+input[type=range] { width: 100%; margin-top: 8px; }
+.hint-s { color: var(--muted); font-size: .82rem; margin-top: 6px; line-height: 1.5; }
+.warn { background: #fff4e5; color: #8a4b00; border-radius: 12px; padding: 12px; margin-top: 12px; font-size: .9rem; display: none; line-height: 1.5; }
+.toast { position: fixed; left: 50%; bottom: 30px; transform: translateX(-50%); background: #222; color: #fff; padding: 10px 16px; border-radius: 999px; font-size: .9rem; opacity: 0; transition: .3s; pointer-events: none; z-index: 99; max-width: 90vw; text-align: center; }
+.toast.show { opacity: 1; }
+.summary { text-align: center; padding: 30px 10px; }
+.summary .big { font-size: 3rem; }
+.summary h2 { margin: 8px 0; }
+.tabs { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.tabs button { padding: 8px 12px; background: var(--card); border: 1px solid var(--line); font-size: .85rem; }
+.tabs button.on { background: var(--navy); color: #fff; border-color: var(--navy); }
+</style>
+</head>
+<body>
+
+<!-- ============================ ホーム ============================ -->
+<section id="home" class="screen show">
+  <div class="top">
+    <h1>毎日10分 英会話</h1>
+    <button class="iconbtn" id="btnSettings">⚙ 設定</button>
+  </div>
+  <div class="hero">
+    <p class="title">今日も10分だけ。</p>
+    <p class="sub">聞く → まねる → 思い出す → 話す。<br>覚えたフレーズは間隔をあけて自動で復習します。</p>
+    <div class="stats">
+      <div class="stat"><b id="stStreak">0</b><span>連続日数</span></div>
+      <div class="stat"><b id="stLearned">0</b><span>定着した数</span></div>
+      <div class="stat"><b id="stDue">0</b><span>今日の復習</span></div>
+    </div>
+    <div class="master">日常会話マスターまで <b id="masterPct">0%</b><span id="masterEst"></span><div class="bar"><i id="masterBar" style="width:0%"></i></div></div>
+  </div>
+  <button class="bigbtn" id="btnLesson">▶ 今日のレッスンを始める<small id="lessonSub"></small></button>
+
+  <div class="road">
+    <h3>🗺 ロードマップ</h3>
+    <div id="roadmap"></div>
+  </div>
+
+  <p class="sect">おぼえる</p>
+  <div class="menu">
+    <button id="btnScenes"><span class="ic">🗂</span><b>場面フレーズ</b><span id="menuPhraseCount">全場面を見る</span></button>
+    <button id="btnPatterns"><span class="ic">🧩</span><b>型トレーニング</b><span>14の型に単語を入れ替え</span></button>
+    <button id="btnGrammar"><span class="ic">📘</span><b>文法のツボ</b><span>会話に必要な12枚だけ</span></button>
+    <button id="btnMine"><span class="ic">📝</span><b>マイフレーズ</b><span>自分が言いたい文を登録</span></button>
+  </div>
+  <p class="sect">きたえる</p>
+  <div class="menu">
+    <button id="btnListen"><span class="ic">👂</span><b>聞き取りクイズ</b><span>英語だけ聞いて意味を選ぶ</span></button>
+    <button id="btnNumbers"><span class="ic">🔢</span><b>数字ドリル</b><span>値段・時刻・年・電話番号</span></button>
+    <button id="btnTest"><span class="ic">🏆</span><b>腕試しテスト</b><span id="menuTestBest">覚えた文から10問</span></button>
+    <button id="btnSurvival"><span class="ic">🆘</span><b>困ったときの一言</b><span>最初に覚える聞き返し</span></button>
+  </div>
+  <p class="sect">AIと話す（要Geminiキー）</p>
+  <div class="menu">
+    <button id="btnAI"><span class="ic">💬</span><b>AI会話練習</b><span>場面ロールプレイ＋添削</span></button>
+    <button id="btnAsk"><span class="ic">🙋</span><b>AI先生に質問</b><span>「これ英語で何て言う？」</span></button>
+  </div>
+
+  <div class="howto">
+    <h3>最短で日常会話に届く5つのルール</h3>
+    <ol>
+      <li><b>毎日10分。</b>週1で1時間より、毎日10分のほうが定着します。</li>
+      <li><b>まず「聞き返し」を覚える。</b>「もう一度」「ゆっくり」が言えれば会話は止まりません。</li>
+      <li><b>型×単語。</b>Could you 〜? / I'd like 〜 など14の型で日常の大半を言えます。</li>
+      <li><b>口に出す。</b>読むだけはNG。マイクで採点して、通じる発音に。</li>
+      <li><b>完璧を捨てる。</b>単語を並べるだけでも通じます。間違えても次へ。</li>
+    </ol>
+    <p style="margin:10px 0 0;font-size:.85rem;color:var(--muted)">目安：1日5文なら約2か月でレベル4まで到達。その後は復習＋AI会話で定着させます。</p>
+  </div>
+  <p class="ver">v2.0</p>
+</section>
+
+<!-- ============================ レッスン ============================ -->
+<section id="lesson" class="screen">
+  <div class="top">
+    <button class="back" data-back>←</button>
+    <h1 id="lessonTitle">今日のレッスン</h1>
+    <span id="lessonCount" style="font-size:.85rem;color:var(--muted)"></span>
+  </div>
+  <div class="progress"><i id="lessonBar" style="width:0%"></i></div>
+  <div class="card" id="lessonCard"></div>
+</section>
+
+<section id="done" class="screen">
+  <div class="top"><h1>おつかれさま！</h1></div>
+  <div class="card summary">
+    <div class="big" id="doneIcon">🎉</div>
+    <h2 id="doneTitle">今日のレッスン完了</h2>
+    <p id="doneText" style="line-height:1.7"></p>
+    <button class="b-blue" style="padding:14px 28px;font-weight:700" id="btnDoneHome">ホームへ</button>
+  </div>
+</section>
+
+<!-- ============================ 場面一覧 ============================ -->
+<section id="scenes" class="screen">
+  <div class="top"><button class="back" data-back>←</button><h1>場面フレーズ</h1></div>
+  <div class="list" id="sceneList"></div>
+</section>
+<section id="phrases" class="screen">
+  <div class="top"><button class="back" data-back>←</button><h1 id="phrasesTitle"></h1></div>
+  <p class="hint-s">タップで読み上げ。🎤で言ってみて採点。◎は覚えた印です。</p>
+  <div class="list" id="phraseList"></div>
+</section>
+
+<!-- ============================ 型 ============================ -->
+<section id="patterns" class="screen">
+  <div class="top"><button class="back" data-back>←</button><h1>型トレーニング</h1></div>
+  <p class="hint-s">黄色の部分を入れ替えるだけで、いろいろ言えるようになります。</p>
+  <div class="list" id="patternList"></div>
+</section>
+<section id="pattern" class="screen">
+  <div class="top"><button class="back" data-back>←</button><h1 id="patternTitle"></h1></div>
+  <div class="card" id="patternCard"></div>
+</section>
+
+<!-- ============================ 文法 ============================ -->
+<section id="grammar" class="screen">
+  <div class="top"><button class="back" data-back>←</button><h1>文法のツボ</h1></div>
+  <p class="hint-s">試験の文法は要りません。会話で「これだけ知っていれば通じる」12枚。例文をタップすると読み上げます。</p>
+  <div class="list" id="grammarList"></div>
+</section>
+<section id="grammarCard" class="screen">
+  <div class="top"><button class="back" data-back>←</button><h1 id="gramTitle"></h1></div>
+  <div class="card gram" id="gramBody"></div>
+</section>
+
+<!-- ============================ マイフレーズ ============================ -->
+<section id="mine" class="screen">
+  <div class="top"><button class="back" data-back>←</button><h1>マイフレーズ</h1></div>
+  <div class="card">
+    <p class="hint-s" style="margin-top:0">自分が本当に言いたい文を登録すると、今日のレッスンに最優先で出てきます。</p>
+    <label class="f">日本語<input type="text" id="mineJp" placeholder="例：息子はゴミ収集車が大好きです"></label>
+    <label class="f">英語<input type="text" id="mineEn" placeholder="例：My son loves garbage trucks."></label>
+    <div class="row"><button class="b-light" id="btnMineAI">🤖 AIに英訳してもらう</button><button class="b-blue" id="btnMineAdd">＋ 登録</button></div>
+  </div>
+  <div class="list" id="mineList"></div>
+</section>
+
+<!-- ============================ 数字ドリル ============================ -->
+<section id="numbers" class="screen">
+  <div class="top"><button class="back" data-back>←</button><h1>数字ドリル</h1></div>
+  <p class="hint-s">旅行で一番つまずくのが数字。日本語を見て英語で言ってみましょう。</p>
+  <div class="tabs" id="numTabs"></div>
+  <div class="card" id="numCard"></div>
+</section>
+
+<!-- ============================ AI ============================ -->
+<section id="aiScenes" class="screen">
+  <div class="top"><button class="back" data-back>←</button><h1>AI会話練習</h1></div>
+  <div class="warn" id="aiKeyWarn">AI会話にはGeminiのAPIキーが必要です。⚙設定から入力してください（無料枠あり）。キーが無くても他の練習は全部使えます。</div>
+  <p class="hint-s">場面を選ぶと、AIが相手役になります。マイクか文字で返事をすると、より自然な言い方も教えてくれます。</p>
+  <div class="list" id="aiSceneList"></div>
+</section>
+<section id="aiChat" class="screen">
+  <div class="top">
+    <button class="back" data-back>←</button>
+    <h1 id="chatTitle"></h1>
+    <button class="iconbtn" id="btnChatJp">日本語</button>
+  </div>
+  <div class="chat" id="chatLog"></div>
+  <div class="chatbar">
+    <div class="in">
+      <button class="b-mic" id="btnChatMic">🎤</button>
+      <input type="text" id="chatInput" placeholder="英語で返事（文字でもOK）" autocomplete="off">
+      <button class="b-blue" id="btnChatSend">送る</button>
+    </div>
+  </div>
+</section>
+<section id="ask" class="screen">
+  <div class="top"><button class="back" data-back>←</button><h1>AI先生に質問</h1></div>
+  <div class="warn" id="askKeyWarn">GeminiのAPIキーが必要です。⚙設定から入力してください。</div>
+  <div class="card">
+    <label class="f">日本語で「言いたいこと」を書く
+      <textarea id="askInput" rows="3" placeholder="例：財布を落としたみたいなんですが、届いていませんか？"></textarea>
+    </label>
+    <div class="row"><button class="b-blue" id="btnAskSend">英語で何て言う？</button></div>
+  </div>
+  <div id="askLog"></div>
+</section>
+
+<!-- ============================ 設定 ============================ -->
+<section id="settings" class="screen">
+  <div class="top"><button class="back" data-back>←</button><h1>設定</h1></div>
+  <div class="card">
+    <label class="f">あなたの名前（ローマ字）<input type="text" id="setName" placeholder="Ken"></label>
+    <p class="hint-s">例文の「Ken」がこの名前に置き換わります。</p>
+    <label class="f">1日に新しく覚える数
+      <select id="setNew"><option value="3">3文（ゆっくり）</option><option value="5">5文（おすすめ）</option><option value="8">8文（がんばる）</option><option value="12">12文（急ぎ）</option></select>
+    </label>
+    <label class="f">読み上げの速さ <span id="rateVal"></span>
+      <input type="range" id="setRate" min="0.6" max="1.2" step="0.1">
+    </label>
+    <label class="f">英語の声<select id="setVoice"></select></label>
+    <div class="warn" id="voiceWarn">この端末に英語の声が見つかりません。Androidなら「設定 → 言語と入力 → テキスト読み上げ」で英語の音声データを追加してください。</div>
+    <div class="row"><button class="b-light" id="btnTestVoice">🔊 声をテスト</button></div>
+
+    <label class="f">Gemini APIキー（AI機能用・任意）<input type="password" id="setKey" placeholder="AIza… を貼り付け"></label>
+    <p class="hint-s">キーはこの端末の中だけに保存され、Google以外には送られません。<a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>で無料で作れます。</p>
+    <div class="row"><button class="b-blue" id="btnSaveKey">キーを保存</button><button class="b-gray" id="btnClearKey">削除</button></div>
+
+    <label class="f">学習データ</label>
+    <p class="hint-s">覚えた記録はこの端末の中だけに保存されます。</p>
+    <div class="row"><button class="b-gray" id="btnReset">記録をすべて消す</button></div>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================================
+   データ：レベルと場面
+   ===================================================================== */
+const LEVELS = [
+  { n:1, name:"サバイバル", desc:"会話を止めない・自分のことを言う" },
+  { n:2, name:"旅行・外出", desc:"注文・買い物・移動・宿・空港" },
+  { n:3, name:"日常の雑談", desc:"家・天気・趣味・気持ち・約束" },
+  { n:4, name:"深める", desc:"意見・経験談・家族・仕事・外国人対応" },
+];
+const SCENES = [
+  { id:"help",   lv:1, ic:"🆘", name:"聞き返す・困ったとき", desc:"最初に覚える。これで会話が止まらない" },
+  { id:"greet",  lv:1, ic:"👋", name:"あいさつ・自己紹介",   desc:"初対面と毎日のやりとり" },
+  { id:"num",    lv:1, ic:"🔢", name:"数字・時間・お金",     desc:"時刻・値段・年齢・日付" },
+  { id:"food",   lv:2, ic:"🍽", name:"カフェ・レストラン",   desc:"注文から会計まで" },
+  { id:"shop",   lv:2, ic:"🛍", name:"買い物",               desc:"値段・サイズ・支払い" },
+  { id:"move",   lv:2, ic:"🚉", name:"道をたずねる・移動",   desc:"駅・バス・タクシー" },
+  { id:"hotel",  lv:2, ic:"🏨", name:"ホテル",               desc:"チェックインとお願いごと" },
+  { id:"air",    lv:2, ic:"✈️", name:"空港・機内",           desc:"入国・座席・荷物" },
+  { id:"sick",   lv:2, ic:"🏥", name:"体調・トラブル",       desc:"具合が悪い・なくした" },
+  { id:"chat",   lv:3, ic:"☕", name:"雑談",                 desc:"趣味・家族・あいづち" },
+  { id:"feel",   lv:3, ic:"😊", name:"気持ち・意見",         desc:"うれしい・賛成・それはどうかな" },
+  { id:"daily",  lv:3, ic:"🏠", name:"家・毎日のこと",       desc:"起きる・ごはん・帰る" },
+  { id:"weather",lv:3, ic:"🌤", name:"天気・季節",           desc:"雑談の入口はいつも天気" },
+  { id:"hobby",  lv:3, ic:"🏄", name:"趣味・スポーツ",       desc:"好きなことを語る" },
+  { id:"invite", lv:3, ic:"📅", name:"誘う・約束",           desc:"予定を決める・遅れる" },
+  { id:"opinion",lv:4, ic:"💡", name:"意見・説明する",       desc:"理由・例・つまり" },
+  { id:"story",  lv:4, ic:"📖", name:"経験を話す",           desc:"先週こうだった・初めてだった" },
+  { id:"family", lv:4, ic:"👨‍👩‍👦", name:"家族・子ども",      desc:"息子・両親・声かけ" },
+  { id:"work",   lv:4, ic:"📞", name:"電話・仕事",           desc:"かけ直す・オンライン会議" },
+  { id:"guide",  lv:4, ic:"🧑‍✈️", name:"外国人に対応する",   desc:"確認・案内・安心させる" },
+];
+
+/* =====================================================================
+   データ：場面フレーズ（en=英語 jp=日本語 n=ひとこと解説）
+   ===================================================================== */
+const PHRASES = [
+  // 聞き返す・困ったとき
+  { s:"help", en:"Sorry?", jp:"え、なんて？", n:"語尾を上げるだけ。一番使う聞き返し。" },
+  { s:"help", en:"Could you say that again?", jp:"もう一度言ってもらえますか？" },
+  { s:"help", en:"Could you speak more slowly?", jp:"もっとゆっくり話してもらえますか？" },
+  { s:"help", en:"I don't understand.", jp:"わかりません。" },
+  { s:"help", en:"What does that mean?", jp:"それはどういう意味ですか？" },
+  { s:"help", en:"How do you say this in English?", jp:"これは英語で何と言いますか？", n:"指さしながら言えばOK。" },
+  { s:"help", en:"I'm still learning English.", jp:"英語はまだ勉強中です。", n:"最初に言っておくと相手がゆっくり話してくれる。" },
+  { s:"help", en:"Let me think.", jp:"ちょっと考えさせて。", n:"沈黙のかわりに言う。" },
+  { s:"help", en:"Could you write it down?", jp:"書いてもらえますか？" },
+  { s:"help", en:"Do you speak Japanese?", jp:"日本語は話せますか？" },
+  { s:"help", en:"Excuse me.", jp:"すみません。（呼びかけ）" },
+  { s:"help", en:"Could you help me?", jp:"手伝ってもらえますか？" },
+  { s:"help", en:"Just a moment, please.", jp:"少々お待ちください。" },
+  { s:"help", en:"Never mind.", jp:"気にしないで。／やっぱりいいです。" },
+  { s:"help", en:"That's OK.", jp:"大丈夫です。" },
+  { s:"help", en:"Thank you so much.", jp:"本当にありがとう。" },
+  { s:"help", en:"You're welcome.", jp:"どういたしまして。" },
+  { s:"help", en:"I'm not sure.", jp:"よくわかりません。（自信がない）" },
+  { s:"help", en:"Could you show me?", jp:"見せて（やって見せて）もらえますか？" },
+  { s:"help", en:"Is that right?", jp:"それで合っていますか？" },
+
+  // あいさつ・自己紹介
+  { s:"greet", en:"Hi, how are you?", jp:"こんにちは、元気？" },
+  { s:"greet", en:"I'm good, thanks. And you?", jp:"元気です。あなたは？" },
+  { s:"greet", en:"Nice to meet you.", jp:"はじめまして。" },
+  { s:"greet", en:"My name is Ken.", jp:"ケンといいます。", n:"名前は設定で自分のものに変えられます。" },
+  { s:"greet", en:"Please call me Ken.", jp:"ケンと呼んでください。" },
+  { s:"greet", en:"I'm from Japan.", jp:"日本から来ました。" },
+  { s:"greet", en:"Where are you from?", jp:"どちらから来ましたか？" },
+  { s:"greet", en:"What do you do?", jp:"お仕事は何を？", n:"直訳は「何をしますか」だが職業を聞く定番。" },
+  { s:"greet", en:"I work in an office.", jp:"会社（役所）で働いています。" },
+  { s:"greet", en:"I have two kids.", jp:"子どもが2人います。" },
+  { s:"greet", en:"How was your day?", jp:"今日はどうだった？" },
+  { s:"greet", en:"It was great.", jp:"とてもよかったよ。" },
+  { s:"greet", en:"Long time no see.", jp:"久しぶり。" },
+  { s:"greet", en:"See you later.", jp:"またあとで。" },
+  { s:"greet", en:"Have a nice day.", jp:"よい一日を。" },
+  { s:"greet", en:"Take care.", jp:"気をつけてね。" },
+  { s:"greet", en:"It was nice talking to you.", jp:"話せてよかったです。", n:"別れぎわの定番。" },
+
+  // 数字・時間・お金
+  { s:"num", en:"What time is it?", jp:"今、何時？" },
+  { s:"num", en:"It's half past seven.", jp:"7時半です。", n:"half past＝30分すぎ" },
+  { s:"num", en:"It's ten to nine.", jp:"9時10分前です。", n:"to＝〜前、past＝〜すぎ" },
+  { s:"num", en:"The meeting is at 3 p.m.", jp:"会議は午後3時です。" },
+  { s:"num", en:"I was born in 1985.", jp:"1985年生まれです。", n:"nineteen eighty-five と2けたずつ読む" },
+  { s:"num", en:"It costs twenty dollars.", jp:"20ドルです。" },
+  { s:"num", en:"That's twelve fifty.", jp:"12ドル50セントです。", n:"dollars/centsは省くのがふつう" },
+  { s:"num", en:"I'll take three of these.", jp:"これを3つください。" },
+  { s:"num", en:"It's about a ten-minute walk.", jp:"歩いて10分くらいです。" },
+  { s:"num", en:"I'm forty-five years old.", jp:"45歳です。" },
+  { s:"num", en:"Today is September 19th.", jp:"今日は9月19日です。", n:"日にちはnineteenth（序数）" },
+  { s:"num", en:"See you on Monday.", jp:"月曜日に会おう。", n:"曜日にはon" },
+  { s:"num", en:"I've been here for two weeks.", jp:"ここに来て2週間です。" },
+  { s:"num", en:"My number is 090-1234-5678.", jp:"番号は090-1234-5678です。", n:"数字は1つずつ読む。0は zero か oh" },
+
+  // カフェ・レストラン
+  { s:"food", en:"A table for two, please.", jp:"2人です。" },
+  { s:"food", en:"Could I see the menu?", jp:"メニューを見せてもらえますか？" },
+  { s:"food", en:"What do you recommend?", jp:"おすすめは何ですか？" },
+  { s:"food", en:"I'll have this one.", jp:"これにします。", n:"指さしで通じる最強の注文。" },
+  { s:"food", en:"I'd like a coffee, please.", jp:"コーヒーをください。" },
+  { s:"food", en:"For here, please.", jp:"店内で食べます。" },
+  { s:"food", en:"Can I get this to go?", jp:"持ち帰りにできますか？" },
+  { s:"food", en:"No ice, please.", jp:"氷なしでお願いします。" },
+  { s:"food", en:"Could I have some water?", jp:"お水をもらえますか？" },
+  { s:"food", en:"Does this have nuts in it?", jp:"これにナッツは入っていますか？" },
+  { s:"food", en:"I'm allergic to eggs.", jp:"卵アレルギーです。" },
+  { s:"food", en:"Could I have the check, please?", jp:"お会計をお願いします。" },
+  { s:"food", en:"Can we pay separately?", jp:"別々に払えますか？" },
+  { s:"food", en:"It was delicious.", jp:"おいしかったです。" },
+  { s:"food", en:"I'm full.", jp:"おなかいっぱいです。" },
+
+  // 買い物
+  { s:"shop", en:"I'm just looking, thanks.", jp:"見ているだけです。" },
+  { s:"shop", en:"How much is this?", jp:"これはいくらですか？" },
+  { s:"shop", en:"Do you have this in a larger size?", jp:"これの大きいサイズはありますか？" },
+  { s:"shop", en:"Can I try this on?", jp:"試着してもいいですか？" },
+  { s:"shop", en:"I'll take it.", jp:"これを買います。" },
+  { s:"shop", en:"Do you take credit cards?", jp:"クレジットカードは使えますか？" },
+  { s:"shop", en:"Could I get a bag?", jp:"袋をもらえますか？" },
+  { s:"shop", en:"I'm looking for a gift for my son.", jp:"息子へのプレゼントを探しています。" },
+  { s:"shop", en:"Is this on sale?", jp:"これはセール品ですか？" },
+  { s:"shop", en:"That's a bit expensive.", jp:"ちょっと高いですね。" },
+  { s:"shop", en:"Can I get a refund?", jp:"返金できますか？" },
+  { s:"shop", en:"Where is the restroom?", jp:"トイレはどこですか？" },
+  { s:"shop", en:"Could I have a receipt?", jp:"レシートをもらえますか？" },
+
+  // 道・移動
+  { s:"move", en:"Excuse me, where is the station?", jp:"すみません、駅はどこですか？" },
+  { s:"move", en:"How do I get to the museum?", jp:"博物館へはどう行けばいいですか？" },
+  { s:"move", en:"Is it far from here?", jp:"ここから遠いですか？" },
+  { s:"move", en:"Can I walk there?", jp:"歩いて行けますか？" },
+  { s:"move", en:"Which line goes to the airport?", jp:"空港へはどの線ですか？" },
+  { s:"move", en:"Does this bus go downtown?", jp:"このバスは中心街へ行きますか？" },
+  { s:"move", en:"Where should I get off?", jp:"どこで降りればいいですか？" },
+  { s:"move", en:"Could you tell me when we get there?", jp:"着いたら教えてもらえますか？" },
+  { s:"move", en:"One ticket to Boston, please.", jp:"ボストンまで1枚ください。" },
+  { s:"move", en:"I'm lost.", jp:"道に迷いました。" },
+  { s:"move", en:"Turn left at the corner.", jp:"角を左に曲がって。" },
+  { s:"move", en:"It's on your right.", jp:"右側にあります。" },
+  { s:"move", en:"Could you take me to this address?", jp:"この住所まで行ってもらえますか？（タクシー）" },
+  { s:"move", en:"How long does it take?", jp:"どのくらい時間がかかりますか？" },
+
+  // ホテル
+  { s:"hotel", en:"I have a reservation under Tanaka.", jp:"田中で予約しています。", n:"under＋名前＝〜の名前で" },
+  { s:"hotel", en:"Could I check in, please?", jp:"チェックインをお願いします。" },
+  { s:"hotel", en:"What time is breakfast?", jp:"朝食は何時ですか？" },
+  { s:"hotel", en:"What's the Wi-Fi password?", jp:"Wi-Fiのパスワードは？" },
+  { s:"hotel", en:"Could I get an extra towel?", jp:"タオルをもう1枚もらえますか？" },
+  { s:"hotel", en:"The air conditioner doesn't work.", jp:"エアコンが動きません。" },
+  { s:"hotel", en:"Could I have a wake-up call at seven?", jp:"7時にモーニングコールをお願いできますか？" },
+  { s:"hotel", en:"Could you keep my luggage?", jp:"荷物を預かってもらえますか？" },
+  { s:"hotel", en:"I'd like to check out.", jp:"チェックアウトしたいです。" },
+  { s:"hotel", en:"Could you call a taxi for me?", jp:"タクシーを呼んでもらえますか？" },
+
+  // 空港・機内
+  { s:"air", en:"Where is the check-in counter?", jp:"チェックインカウンターはどこですか？" },
+  { s:"air", en:"Could I have a window seat?", jp:"窓側の席にできますか？" },
+  { s:"air", en:"I'm here for sightseeing.", jp:"観光で来ました。", n:"入国審査の定番。" },
+  { s:"air", en:"I'll stay for five days.", jp:"5日間滞在します。" },
+  { s:"air", en:"Chicken, please.", jp:"チキンをお願いします。（機内食）" },
+  { s:"air", en:"Could I get a blanket?", jp:"毛布をもらえますか？" },
+  { s:"air", en:"Is this seat taken?", jp:"この席は空いていますか？" },
+  { s:"air", en:"My luggage hasn't come out.", jp:"荷物が出てきません。" },
+  { s:"air", en:"Where can I exchange money?", jp:"どこで両替できますか？" },
+  { s:"air", en:"I have nothing to declare.", jp:"申告するものはありません。" },
+
+  // 体調・トラブル
+  { s:"sick", en:"I don't feel well.", jp:"気分がよくありません。" },
+  { s:"sick", en:"I have a headache.", jp:"頭が痛いです。" },
+  { s:"sick", en:"I have a fever.", jp:"熱があります。" },
+  { s:"sick", en:"Is there a pharmacy near here?", jp:"この近くに薬局はありますか？" },
+  { s:"sick", en:"Do you have something for a cold?", jp:"風邪の薬はありますか？" },
+  { s:"sick", en:"I need a doctor.", jp:"医者が必要です。" },
+  { s:"sick", en:"Where is the nearest hospital?", jp:"いちばん近い病院はどこですか？" },
+  { s:"sick", en:"I lost my wallet.", jp:"財布をなくしました。" },
+  { s:"sick", en:"Someone stole my bag.", jp:"バッグを盗まれました。" },
+  { s:"sick", en:"Please call the police.", jp:"警察を呼んでください。" },
+  { s:"sick", en:"I'm feeling better now.", jp:"もう良くなりました。" },
+  { s:"sick", en:"It hurts here.", jp:"ここが痛いです。" },
+
+  // 雑談
+  { s:"chat", en:"What do you like to do on weekends?", jp:"週末は何をするのが好き？" },
+  { s:"chat", en:"I like surfing.", jp:"サーフィンが好きです。" },
+  { s:"chat", en:"Do you have any hobbies?", jp:"趣味はありますか？" },
+  { s:"chat", en:"I'm into making apps.", jp:"アプリ作りにハマっています。", n:"be into 〜＝〜にハマっている" },
+  { s:"chat", en:"Have you ever been to Japan?", jp:"日本に行ったことはありますか？" },
+  { s:"chat", en:"What kind of music do you like?", jp:"どんな音楽が好き？" },
+  { s:"chat", en:"I haven't seen that movie yet.", jp:"その映画はまだ見ていません。" },
+  { s:"chat", en:"How old is your son?", jp:"息子さんは何歳？" },
+  { s:"chat", en:"That sounds fun.", jp:"楽しそうだね。" },
+  { s:"chat", en:"Really?", jp:"ほんとに？", n:"あいづちの王様。" },
+  { s:"chat", en:"I know what you mean.", jp:"わかるよ。" },
+  { s:"chat", en:"What do you think?", jp:"どう思う？" },
+  { s:"chat", en:"By the way, are you hungry?", jp:"ところで、おなかすいてる？", n:"by the way＝話題を変えるとき" },
+  { s:"chat", en:"How about you?", jp:"あなたは？", n:"聞かれたことをそのまま聞き返す。" },
+
+  // 気持ち・意見
+  { s:"feel", en:"I'm so happy.", jp:"すごくうれしい。" },
+  { s:"feel", en:"I'm a little tired.", jp:"ちょっと疲れた。" },
+  { s:"feel", en:"I'm nervous.", jp:"緊張しています。" },
+  { s:"feel", en:"That's a good idea.", jp:"いい考えだね。" },
+  { s:"feel", en:"I think so too.", jp:"私もそう思う。" },
+  { s:"feel", en:"I agree with you.", jp:"賛成です。" },
+  { s:"feel", en:"I'm not so sure about that.", jp:"それはどうかな。", n:"やわらかい反対。" },
+  { s:"feel", en:"It depends.", jp:"場合によるね。" },
+  { s:"feel", en:"I'd rather stay home.", jp:"家にいるほうがいいな。" },
+  { s:"feel", en:"I can't wait!", jp:"待ちきれない！" },
+  { s:"feel", en:"No problem.", jp:"問題ないよ。" },
+  { s:"feel", en:"That's too bad.", jp:"それは残念。" },
+  { s:"feel", en:"Good luck!", jp:"がんばって！" },
+  { s:"feel", en:"Congratulations!", jp:"おめでとう！" },
+
+  // 家・毎日のこと
+  { s:"daily", en:"I usually get up at six.", jp:"いつも6時に起きます。" },
+  { s:"daily", en:"I'm on my way home.", jp:"今、帰る途中です。" },
+  { s:"daily", en:"What's for dinner?", jp:"晩ごはんは何？" },
+  { s:"daily", en:"I'll do the dishes.", jp:"皿洗いは私がやるよ。" },
+  { s:"daily", en:"I have to go to work tomorrow.", jp:"明日は仕事に行かないと。" },
+  { s:"daily", en:"I'm off tomorrow.", jp:"明日は休みです。", n:"off＝休み" },
+  { s:"daily", en:"I couldn't sleep well last night.", jp:"昨夜はよく眠れなかった。" },
+  { s:"daily", en:"I'm going to take a shower.", jp:"シャワーを浴びてくるね。" },
+  { s:"daily", en:"Could you pick up some milk on the way home?", jp:"帰りに牛乳を買ってきてくれる？", n:"pick up＝ついでに買う" },
+  { s:"daily", en:"Time for bed.", jp:"寝る時間だよ。" },
+  { s:"daily", en:"I'll be back by six.", jp:"6時までに戻ります。", n:"by＝〜までに" },
+  { s:"daily", en:"Let's clean up.", jp:"片づけよう。" },
+
+  // 天気・季節
+  { s:"weather", en:"It looks like rain.", jp:"雨が降りそう。" },
+  { s:"weather", en:"It's freezing today.", jp:"今日は凍えるほど寒い。" },
+  { s:"weather", en:"It's nice and warm.", jp:"いい感じに暖かいね。" },
+  { s:"weather", en:"Don't forget your umbrella.", jp:"傘を忘れないで。" },
+  { s:"weather", en:"The forecast says it'll be sunny tomorrow.", jp:"予報では明日は晴れだって。" },
+  { s:"weather", en:"It's humid, isn't it?", jp:"蒸し暑いね。", n:"isn't it?＝〜だよね" },
+  { s:"weather", en:"The waves are good today.", jp:"今日は波がいい。" },
+  { s:"weather", en:"It's getting cold.", jp:"寒くなってきたね。" },
+  { s:"weather", en:"I love spring.", jp:"春が大好き。" },
+  { s:"weather", en:"What's the weather like in your country?", jp:"あなたの国の天気はどう？" },
+
+  // 趣味・スポーツ
+  { s:"hobby", en:"I've been surfing for ten years.", jp:"サーフィン歴10年です。" },
+  { s:"hobby", en:"I'm not very good at it, but I enjoy it.", jp:"上手ではないけど楽しんでいます。" },
+  { s:"hobby", en:"How often do you work out?", jp:"どのくらいの頻度で運動する？" },
+  { s:"hobby", en:"I go to the beach every Sunday.", jp:"毎週日曜に海へ行きます。" },
+  { s:"hobby", en:"Do you play any sports?", jp:"何かスポーツはしますか？" },
+  { s:"hobby", en:"I'm a big fan of baseball.", jp:"野球の大ファンです。" },
+  { s:"hobby", en:"I like watching movies at home.", jp:"家で映画を見るのが好き。" },
+  { s:"hobby", en:"I've just started learning English.", jp:"英語を習い始めたばかりです。" },
+  { s:"hobby", en:"I make apps as a hobby.", jp:"趣味でアプリを作っています。" },
+  { s:"hobby", en:"Would you like to try it sometime?", jp:"今度やってみない？" },
+  { s:"hobby", en:"Let's go together next time.", jp:"今度一緒に行こう。" },
+
+  // 誘う・約束
+  { s:"invite", en:"Do you want to grab lunch?", jp:"お昼、一緒にどう？", n:"grab＝さっと食べる" },
+  { s:"invite", en:"Are you free this weekend?", jp:"今週末、空いてる？" },
+  { s:"invite", en:"How about Saturday?", jp:"土曜日はどう？" },
+  { s:"invite", en:"That works for me.", jp:"それで大丈夫。" },
+  { s:"invite", en:"Sounds good.", jp:"いいね。" },
+  { s:"invite", en:"Sorry, I can't make it.", jp:"ごめん、行けない。" },
+  { s:"invite", en:"Can we do it another time?", jp:"別の日にできる？" },
+  { s:"invite", en:"Let me check my schedule.", jp:"予定を確認させて。" },
+  { s:"invite", en:"Let's meet at the station at ten.", jp:"10時に駅で会おう。" },
+  { s:"invite", en:"I'm running late.", jp:"遅れています。" },
+  { s:"invite", en:"I'll be there in ten minutes.", jp:"あと10分で着きます。" },
+
+  // 意見・説明する
+  { s:"opinion", en:"In my opinion, it's worth it.", jp:"私の意見では、その価値はあります。" },
+  { s:"opinion", en:"I'd say it's a little too much.", jp:"ちょっと多すぎる気がします。", n:"I'd say＝〜かなと思う（やわらかい）" },
+  { s:"opinion", en:"The reason is simple.", jp:"理由は簡単です。" },
+  { s:"opinion", en:"For example, my son loves it.", jp:"たとえば、息子はそれが大好きです。" },
+  { s:"opinion", en:"On the other hand, it's expensive.", jp:"その一方で、高いです。" },
+  { s:"opinion", en:"That makes sense.", jp:"なるほど、筋が通っている。" },
+  { s:"opinion", en:"I see your point, but I disagree.", jp:"言いたいことはわかるけど、反対です。" },
+  { s:"opinion", en:"Let me explain.", jp:"説明させてください。" },
+  { s:"opinion", en:"What I mean is, we need more time.", jp:"つまり、もっと時間が必要ということです。" },
+  { s:"opinion", en:"It's up to you.", jp:"あなた次第です。" },
+  { s:"opinion", en:"Either is fine with me.", jp:"どちらでもいいです。" },
+  { s:"opinion", en:"Could you give me an example?", jp:"例をあげてもらえますか？" },
+
+  // 経験を話す
+  { s:"story", en:"I went to Shimoda last week.", jp:"先週、下田に行きました。" },
+  { s:"story", en:"It was my first time.", jp:"初めてでした。" },
+  { s:"story", en:"We had a great time.", jp:"とても楽しかったです。" },
+  { s:"story", en:"I used to play soccer.", jp:"昔サッカーをしていました。", n:"used to＝昔は〜していた" },
+  { s:"story", en:"I've never been abroad.", jp:"海外に行ったことがありません。" },
+  { s:"story", en:"The best part was the food.", jp:"一番よかったのは食べ物です。" },
+  { s:"story", en:"Guess what happened.", jp:"何があったと思う？", n:"話を切り出す一言。" },
+  { s:"story", en:"I was so surprised.", jp:"すごく驚きました。" },
+  { s:"story", en:"It took three hours to get there.", jp:"着くのに3時間かかりました。" },
+  { s:"story", en:"I wish I could go again.", jp:"また行けたらいいな。" },
+  { s:"story", en:"How was your trip?", jp:"旅行はどうだった？" },
+  { s:"story", en:"I'm glad I went.", jp:"行ってよかった。" },
+
+  // 家族・子ども
+  { s:"family", en:"My son is three.", jp:"息子は3歳です。" },
+  { s:"family", en:"He's into garbage trucks.", jp:"彼はゴミ収集車に夢中です。" },
+  { s:"family", en:"He just started preschool.", jp:"幼稚園に通い始めたばかりです。" },
+  { s:"family", en:"Do you have any brothers or sisters?", jp:"兄弟姉妹はいますか？" },
+  { s:"family", en:"I have an older brother.", jp:"兄が1人います。" },
+  { s:"family", en:"My parents live in the countryside.", jp:"両親は田舎に住んでいます。" },
+  { s:"family", en:"How's your family?", jp:"ご家族はお元気？" },
+  { s:"family", en:"I'm taking my son to the beach.", jp:"息子を海に連れて行きます。" },
+  { s:"family", en:"Be careful!", jp:"気をつけて！" },
+  { s:"family", en:"Good job!", jp:"よくできたね！" },
+  { s:"family", en:"Let's go to the park.", jp:"公園に行こう。" },
+  { s:"family", en:"It's time to go home.", jp:"帰る時間だよ。" },
+
+  // 電話・仕事
+  { s:"work", en:"Hello, this is Ken.", jp:"もしもし、ケンです。", n:"電話では I am でなく this is" },
+  { s:"work", en:"Can I call you back later?", jp:"あとでかけ直してもいい？" },
+  { s:"work", en:"Sorry, I'm busy right now.", jp:"ごめん、今ちょっと忙しい。" },
+  { s:"work", en:"I'm in a meeting.", jp:"会議中です。" },
+  { s:"work", en:"Could you send me the file?", jp:"ファイルを送ってもらえますか？" },
+  { s:"work", en:"I'll get back to you tomorrow.", jp:"明日お返事します。" },
+  { s:"work", en:"Can you hear me?", jp:"聞こえていますか？" },
+  { s:"work", en:"You're on mute.", jp:"ミュートになっていますよ。" },
+  { s:"work", en:"Let me share my screen.", jp:"画面を共有しますね。" },
+  { s:"work", en:"Thanks for your help.", jp:"手伝ってくれてありがとう。" },
+
+  // 外国人に対応する
+  { s:"guide", en:"May I see your ID?", jp:"身分証を見せてもらえますか？" },
+  { s:"guide", en:"Do you have your passport with you?", jp:"パスポートは持っていますか？" },
+  { s:"guide", en:"What's your nationality?", jp:"国籍はどちらですか？" },
+  { s:"guide", en:"Could you spell your name?", jp:"名前のつづりを教えてもらえますか？" },
+  { s:"guide", en:"Where are you staying?", jp:"どこに滞在していますか？" },
+  { s:"guide", en:"Please tell me what happened.", jp:"何があったか話してください。" },
+  { s:"guide", en:"Are you hurt?", jp:"けがはありませんか？" },
+  { s:"guide", en:"Don't worry, you're safe now.", jp:"大丈夫、もう安全です。" },
+  { s:"guide", en:"Please wait here.", jp:"ここでお待ちください。" },
+  { s:"guide", en:"Could you fill out this form?", jp:"この用紙に記入してもらえますか？" },
+  { s:"guide", en:"Please sign here.", jp:"ここにサインしてください。" },
+  { s:"guide", en:"Is there anyone who can interpret?", jp:"通訳できる人はいますか？" },
+  { s:"guide", en:"I'll call someone who speaks English.", jp:"英語が話せる人を呼びます。" },
+];
+PHRASES.forEach((p, i) => p.id = "p" + i);
+
+/* =====================================================================
+   データ：型（黄色い部分を入れ替える）
+   ===================================================================== */
+const PATTERNS = [
+  { en:"I'd like {}.", jp:"〜をお願いします", ex:[["a coffee","コーヒーをお願いします。"],["some water","お水をお願いします。"],["a window seat","窓側の席をお願いします。"],["to check in","チェックインをお願いします。"],["a refund","返金をお願いします。"]] },
+  { en:"Could you {}?", jp:"〜してもらえますか？", ex:[["say that again","もう一度言ってもらえますか？"],["speak more slowly","もっとゆっくり話してもらえますか？"],["help me","手伝ってもらえますか？"],["write it down","書いてもらえますか？"],["call a taxi","タクシーを呼んでもらえますか？"]] },
+  { en:"Could I have {}?", jp:"〜をもらえますか？", ex:[["the menu","メニューをもらえますか？"],["some water","お水をもらえますか？"],["the check","お会計をもらえますか？"],["a receipt","レシートをもらえますか？"],["another one","もう1つもらえますか？"]] },
+  { en:"Do you have {}?", jp:"〜はありますか？", ex:[["a larger size","大きいサイズはありますか？"],["Wi-Fi","Wi-Fiはありますか？"],["this in blue","これの青はありますか？"],["something for a cold","風邪の薬はありますか？"],["a map","地図はありますか？"]] },
+  { en:"Can I {}?", jp:"〜してもいい？", ex:[["try this on","試着してもいい？"],["pay by card","カードで払ってもいい？"],["sit here","ここに座ってもいい？"],["take a photo","写真を撮ってもいい？"],["get this to go","持ち帰りにしてもいい？"]] },
+  { en:"Where is {}?", jp:"〜はどこですか？", ex:[["the station","駅はどこですか？"],["the restroom","トイレはどこですか？"],["the exit","出口はどこですか？"],["the nearest bank","いちばん近い銀行はどこですか？"],["the bus stop","バス停はどこですか？"]] },
+  { en:"How do I {}?", jp:"どうやって〜？", ex:[["get to the airport","空港へはどう行けばいい？"],["use this","これはどう使えばいい？"],["open this","これはどう開ければいい？"],["say this in English","これは英語でどう言えばいい？"],["get a ticket","切符はどう買えばいい？"]] },
+  { en:"I'm looking for {}.", jp:"〜を探しています", ex:[["a pharmacy","薬局を探しています。"],["a gift","プレゼントを探しています。"],["my hotel","泊まるホテルを探しています。"],["the bus stop","バス停を探しています。"],["a good restaurant","いいレストランを探しています。"]] },
+  { en:"What time {}?", jp:"何時に〜？", ex:[["does it open","何時に開きますか？"],["does the train leave","電車は何時に出ますか？"],["is breakfast","朝食は何時ですか？"],["do you close","何時に閉まりますか？"],["should we meet","何時に会いましょうか？"]] },
+  { en:"I'm going to {}.", jp:"〜するつもりです", ex:[["take a walk","散歩するつもりです。"],["call my wife","妻に電話するつもりです。"],["go surfing tomorrow","明日サーフィンに行くつもりです。"],["stay for three days","3日間泊まるつもりです。"],["buy this","これを買うつもりです。"]] },
+  { en:"Have you ever {}?", jp:"〜したことある？", ex:[["been to Japan","日本に行ったことある？"],["tried sushi","寿司を食べたことある？"],["seen this movie","この映画を見たことある？"],["been here before","前にここに来たことある？"],["tried surfing","サーフィンをしたことある？"]] },
+  { en:"Is it OK if I {}?", jp:"〜してもいいですか？", ex:[["sit here","ここに座ってもいいですか？"],["open the window","窓を開けてもいいですか？"],["take a picture","写真を撮ってもいいですか？"],["come a little late","少し遅れてもいいですか？"],["bring my son","息子を連れてきてもいいですか？"]] },
+  { en:"I think {}.", jp:"〜と思う", ex:[["it's a good idea","いい考えだと思う。"],["we should go","行ったほうがいいと思う。"],["it's too expensive","高すぎると思う。"],["he's right","彼が正しいと思う。"],["it'll rain","雨が降ると思う。"]] },
+  { en:"Let's {}.", jp:"〜しよう", ex:[["take a break","休憩しよう。"],["get lunch","お昼にしよう。"],["meet at ten","10時に会おう。"],["try it","やってみよう。"],["go home","帰ろう。"]] },
+];
+
+/* =====================================================================
+   データ：文法のツボ
+   ===================================================================== */
+const GRAMMAR = [
+  { t:"語順は「誰が → する → 何を」", body:"英語は語順が命。日本語の「私は寿司を食べる」は、英語では「私は 食べる 寿司を」。主語→動詞→そのあと、の順に並べれば、多少単語が違っても通じます。",
+    ex:[["I eat sushi.","私は寿司を食べる。"],["My son likes trucks.","息子はトラックが好き。"],["We went to the beach.","私たちは海に行った。"]] },
+  { t:"質問は先頭に Do / Is / Can を置く", body:"文の頭に Do（一般の動詞）、Is/Are（〜ですか）、Can（できる？）を置いて語尾を上げるだけ。迷ったら語尾を上げるだけでも質問として通じます。",
+    ex:[["Do you like coffee?","コーヒーは好き？"],["Are you OK?","大丈夫？"],["Can you help me?","手伝ってくれる？"]] },
+  { t:"5W1H は文の頭に", body:"What（何）Where（どこ）When（いつ）Who（誰）Why（なぜ）How（どう）。これを頭に付けて、あとは質問の形。How much（いくら）How long（どのくらい）もよく使います。",
+    ex:[["Where is the station?","駅はどこ？"],["What time is it?","何時？"],["How much is this?","これいくら？"]] },
+  { t:"過去は「動詞 + ed」か、変わり者を覚える", body:"ふつうは ed を付けるだけ（play→played）。よく使う動詞ほど形が変わるので、この5つは丸暗記：go→went、eat→ate、see→saw、have→had、take→took。",
+    ex:[["I went to Shimoda.","下田に行った。"],["We had a great time.","楽しかった。"],["I saw a dolphin.","イルカを見た。"]] },
+  { t:"未来は be going to / will", body:"決まっている予定は be going to、その場で決めたことは will。迷ったら going to で大丈夫。",
+    ex:[["I'm going to go surfing tomorrow.","明日サーフィンに行く。"],["I'll call you later.","あとで電話するね。"],["It's going to rain.","雨が降りそう。"]] },
+  { t:"「今まさに〜している」は be + 〜ing", body:"進行中のことは am/is/are + ing。「今、帰る途中」「今、食べてる」など、電話や連絡でよく使います。",
+    ex:[["I'm going home now.","今、帰ってる。"],["He's sleeping.","彼は寝てる。"],["What are you doing?","何してるの？"]] },
+  { t:"「〜したことある？」は Have you ever + 過去分詞", body:"経験を聞く定番。been（行った）、tried（試した）、seen（見た）の3つでほぼ足ります。答えは Yes, I have. / No, never.",
+    ex:[["Have you ever been to Japan?","日本に行ったことある？"],["Have you tried sushi?","寿司を食べたことある？"],["No, never.","いや、一度も。"]] },
+  { t:"ていねいさの順番：Can I → Could I → May I", body:"Can I（友達）＜ Could I（お店・ふつうの丁寧）＜ May I（かしこまった）。お願いは Could you 〜? で全部OK。please を付ければさらに丁寧。",
+    ex:[["Can I sit here?","ここ座っていい？"],["Could I have the menu?","メニューをもらえますか？"],["May I see your ID?","身分証を拝見できますか？"]] },
+  { t:"a と the のざっくりルール", body:"初めて話に出るものは a（どれでもいい1つ）、お互い分かっているものは the（あれ・それ）。間違えても通じるので気にしすぎない。",
+    ex:[["I'd like a coffee.","コーヒーを1つ。"],["Where is the restroom?","（この店の）トイレはどこ？"],["The waves are good today.","（今日の）波はいい。"]] },
+  { t:"時間の前置詞：at 時刻・on 曜日・in 月", body:"at 3（3時に）、on Monday（月曜に）、in May（5月に）。「時刻はat、日はon、大きいものはin」と覚える。",
+    ex:[["Let's meet at ten.","10時に会おう。"],["See you on Monday.","月曜に。"],["I was born in May.","5月生まれです。"]] },
+  { t:"否定は don't / didn't / isn't", body:"ふつうの動詞は don't（過去は didn't）、be動詞は isn't/aren't。can は can't。動詞の前に置くだけです。",
+    ex:[["I don't understand.","わかりません。"],["I didn't see it.","見なかった。"],["I can't make it.","行けない。"]] },
+  { t:"数えられない名詞には a を付けない", body:"water、money、information、advice、time は数えない。「少し」なら some を付ける。「2つの水」ではなく two bottles of water。",
+    ex:[["Could I have some water?","お水をもらえますか？"],["I need some information.","情報が欲しい。"],["Do you have time?","時間ある？"]] },
+];
+
+/* =====================================================================
+   データ：AI会話の場面
+   ===================================================================== */
+const AI_SCENES = [
+  { id:"cafe",  ic:"☕", name:"カフェで注文",     desc:"あなたは客。AIは店員", role:"a friendly cafe staff member taking an order. Start by greeting the customer and asking what they'd like." },
+  { id:"hotel", ic:"🏨", name:"ホテルのフロント", desc:"チェックインとお願いごと", role:"a hotel front desk clerk. Start by greeting the guest and asking if they have a reservation." },
+  { id:"way",   ic:"🗺", name:"道をたずねる",     desc:"AIは通りがかりの人", role:"a friendly local person on the street. The learner will ask you for directions. Start by saying 'Hi, can I help you?'" },
+  { id:"talk",  ic:"🧑‍🤝‍🧑", name:"初対面の雑談", desc:"AIは新しい同僚", role:"a friendly new coworker meeting the learner for the first time. Start by introducing yourself briefly and asking their name." },
+  { id:"shop",  ic:"🛍", name:"洋服屋で買い物",   desc:"サイズや値段を聞く", role:"a clothing store clerk. Start by greeting the customer and asking if they are looking for anything." },
+  { id:"doc",   ic:"🏥", name:"病院・薬局",       desc:"症状を伝える", role:"a pharmacist. Start by asking the customer how you can help." },
+  { id:"lost",  ic:"🧑‍✈️", name:"困っている外国人", desc:"AIは財布をなくした旅行者。あなたが対応", role:"a foreign tourist who has just lost their wallet and is worried. The learner is a Japanese officer helping you. Start by saying you lost your wallet and asking for help." },
+  { id:"free",  ic:"💬", name:"フリートーク",     desc:"好きな話題で自由に", role:"a friendly English conversation partner. Start by asking the learner how their day is going, then follow whatever topic they bring up." },
+];
+
+/* =====================================================================
+   保存データ（この端末の中だけ）
+   ===================================================================== */
+const $ = (id) => document.getElementById(id);
+const store = {
+  get(k, d) { try { const v = localStorage.getItem("ek_" + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem("ek_" + k, JSON.stringify(v)); } catch {} },
+};
+let settings = Object.assign({ name: "Ken", newPerDay: 5, rate: 0.9, voice: "", apiKey: "", chatJp: true }, store.get("settings", {}));
+let prog = store.get("prog", {});
+let study = Object.assign({ last: "", streak: 0, days: 0, bestTest: -1 }, store.get("study", {}));
+let mine = store.get("mine", []); // マイフレーズ [{id, s:"mine", en, jp}]
+const saveAll = () => { store.set("settings", settings); store.set("prog", prog); store.set("study", study); store.set("mine", mine); };
+
+// 日本時間の日付（toISOStringは世界標準時なので朝9時前に日付がずれる。必ずこちらを使う）
+const todayStr = (offset = 0) => { const d = new Date(); d.setDate(d.getDate() + offset);
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); };
+const INTERVALS = [0, 1, 3, 7, 14, 30, 60]; // 覚えたレベルごとの「次に出すまでの日数」
+const LEARNED_LV = 3;                       // このレベル以上を「覚えた」と数える
+
+const allPhrases = () => PHRASES.concat(mine);
+const findPhrase = (id) => allPhrases().find(p => p.id === id);
+const getEn = (p) => p.en.replace(/\bKen\b/g, settings.name || "Ken");
+function dueIds() { return allPhrases().filter(p => prog[p.id] && prog[p.id].due <= todayStr()).map(p => p.id); }
+function newIds(n) { return mine.filter(p => !prog[p.id]).concat(PHRASES.filter(p => !prog[p.id])).slice(0, n).map(p => p.id); }
+function rate(id, grade) { // grade: 0=まだ 1=なんとか 2=バッチリ
+  const cur = prog[id] || { lv: 0, due: todayStr() };
+  let lv = grade === 0 ? 0 : grade === 1 ? Math.max(1, cur.lv) : Math.min(INTERVALS.length - 1, cur.lv + 1);
+  prog[id] = { lv, due: todayStr(INTERVALS[lv] || 1) };
+  if (lv === 0) prog[id].due = todayStr(1);
+  saveAll();
+}
+function markStudied() {
+  const t = todayStr();
+  if (study.last === t) return;
+  study.streak = (study.last === todayStr(-1)) ? study.streak + 1 : 1;
+  study.last = t; study.days++;
+  saveAll();
+}
+const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const escapeHtml = (s) => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+/* =====================================================================
+   読み上げ（スマホの音声機能）
+   ===================================================================== */
+let voices = [], enVoice = null, currentUtter = null;
+function loadVoices() {
+  if (!("speechSynthesis" in window)) return;
+  voices = speechSynthesis.getVoices();
+  if (!voices.length) return;
+  const en = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith("en"));
+  enVoice = en.find(v => v.name === settings.voice) || en.find(v => /google.*us/i.test(v.name)) || en.find(v => /en[-_]US/i.test(v.lang)) || en[0] || null;
+  $("voiceWarn").style.display = en.length ? "none" : "block";
+  $("setVoice").innerHTML = en.length
+    ? en.map(v => `<option value="${escapeHtml(v.name)}" ${enVoice && v.name === enVoice.name ? "selected" : ""}>${escapeHtml(v.name)} (${v.lang})</option>`).join("")
+    : "<option>英語の声なし</option>";
+}
+if ("speechSynthesis" in window) { speechSynthesis.onvoiceschanged = loadVoices; loadVoices(); }
+function speak(text, slow) {
+  if (!("speechSynthesis" in window)) { toast("この端末は読み上げに対応していません"); return; }
+  stopListening();
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US"; u.rate = slow ? Math.max(0.5, settings.rate - 0.3) : settings.rate; u.pitch = 1.0;
+  if (enVoice) u.voice = enVoice;
+  currentUtter = u;
+  setTimeout(() => speechSynthesis.speak(u), 60);
+}
+
+/* =====================================================================
+   音声認識（自分の声を文字にする）＋ 採点
+   ===================================================================== */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recog = null;
+function stopListening() {
+  if (recog) { try { recog.abort(); } catch {} recog = null; }
+  document.querySelectorAll(".b-mic.listening").forEach(b => { b.classList.remove("listening"); b.textContent = b.dataset.label || "🎤 言ってみる"; });
+}
+function listen(btn, onResult) {
+  if (!SR) { toast("この端末のブラウザは音声認識に対応していません（AndroidのChromeで開いてください）"); return; }
+  if ("speechSynthesis" in window) speechSynthesis.cancel();
+  stopListening();
+  const r = new SR();
+  r.lang = "en-US"; r.interimResults = false; r.maxAlternatives = 5;
+  if (!btn.dataset.label) btn.dataset.label = btn.textContent;
+  btn.classList.add("listening"); btn.textContent = "🎤 聞いています…";
+  const reset = () => { btn.classList.remove("listening"); btn.textContent = btn.dataset.label; recog = null; };
+  r.onresult = (e) => { reset(); onResult(Array.from(e.results[0]).map(a => a.transcript)); };
+  r.onerror = (e) => { reset(); toast(e.error === "not-allowed" ? "マイクの許可が必要です" : e.error === "no-speech" ? "声が聞こえませんでした" : "うまく聞き取れませんでした（ネット接続を確認）"); };
+  r.onend = reset;
+  recog = r;
+  try { r.start(); } catch { reset(); }
+}
+const norm = (s) => s.toLowerCase().replace(/[’‘]/g, "'").replace(/[^a-z0-9' ]/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(Boolean);
+// 単語がどれだけ順番どおり一致したか（LCS＝共通する並び）
+function scoreWords(target, heard) {
+  const t = norm(target), h = norm(heard);
+  const dp = Array.from({ length: t.length + 1 }, () => new Array(h.length + 1).fill(0));
+  for (let i = 1; i <= t.length; i++) for (let j = 1; j <= h.length; j++)
+    dp[i][j] = t[i - 1] === h[j - 1] ? dp[i - 1][j - 1] + 1 : Math.max(dp[i - 1][j], dp[i][j - 1]);
+  const ok = new Array(t.length).fill(false);
+  let i = t.length, j = h.length;
+  while (i > 0 && j > 0) {
+    if (t[i - 1] === h[j - 1]) { ok[i - 1] = true; i--; j--; }
+    else if (dp[i - 1][j] >= dp[i][j - 1]) i--; else j--;
+  }
+  return { score: t.length ? Math.round(dp[t.length][h.length] / t.length * 100) : 0, words: t, ok };
+}
+// targets：正解として認める言い方（複数OK） alts：認識された候補
+function bestScore(targets, alts) {
+  if (!Array.isArray(targets)) targets = [targets];
+  let best = null;
+  targets.forEach(tg => alts.forEach(a => { const r = scoreWords(tg, a); r.heard = a; if (!best || r.score > best.score) best = r; }));
+  return best;
+}
+function renderResult(box, r) {
+  const words = r.words.map((w, i) => `<span class="${r.ok[i] ? "w-ok" : "w-ng"}">${escapeHtml(w)}</span>`).join(" ");
+  const msg = r.score >= 90 ? "すばらしい！" : r.score >= 70 ? "通じます！" : r.score >= 40 ? "もう一度チャレンジ" : "ゆっくり、はっきり言ってみよう";
+  box.innerHTML = `<div class="score">${r.score}点 ${msg}</div><div>${words}</div><div class="heard">聞こえた英語：${escapeHtml(r.heard)}</div>`;
+  box.classList.add("show");
+  return r.score;
+}
+
+/* =====================================================================
+   画面の切り替え
+   ===================================================================== */
+const screenStack = [];
+function showScreen(id, push = true) {
+  stopListening(); if ("speechSynthesis" in window) speechSynthesis.cancel();
+  const cur = document.querySelector(".screen.show");
+  if (push && cur && cur.id !== id) screenStack.push(cur.id);
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("show"));
+  $(id).classList.add("show");
+  window.scrollTo(0, 0);
+  if (id === "home") renderHome();
+}
+function goBack() { const prev = screenStack.pop() || "home"; showScreen(prev, false); }
+document.querySelectorAll("[data-back]").forEach(b => b.onclick = goBack);
+let toastTimer;
+function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2800); }
+
+/* =====================================================================
+   ホーム
+   ===================================================================== */
+function renderHome() {
+  const all = allPhrases();
+  const due = dueIds().length;
+  const learned = all.filter(p => prog[p.id] && prog[p.id].lv >= LEARNED_LV).length;
+  const remainingNew = all.filter(p => !prog[p.id]).length;
+  $("stStreak").textContent = study.streak;
+  $("stLearned").textContent = learned;
+  $("stDue").textContent = due;
+  const n = Math.min(settings.newPerDay, remainingNew);
+  $("lessonSub").textContent = `復習 ${due}文 ＋ 新しく ${n}文 ＋ 聞き取り（約${Math.max(3, Math.round((due + n * 2) * 0.6) + 1)}分）`;
+  const pct = Math.round(learned / all.length * 100);
+  $("masterPct").textContent = pct + "%";
+  $("masterBar").style.width = pct + "%";
+  const daysLeft = Math.ceil(remainingNew / settings.newPerDay);
+  const seenN = all.length - remainingNew;
+  $("masterEst").textContent = remainingNew ? `（学習中 ${seenN}文・新しい文はあと${remainingNew}文、1日${settings.newPerDay}文なら約${daysLeft}日）` : "（全部の文に出会いました。復習で定着させましょう）";
+  $("menuPhraseCount").textContent = `${SCENES.length}場面・${PHRASES.length}文`;
+  $("menuTestBest").textContent = study.bestTest >= 0 ? `自己ベスト ${study.bestTest}/10` : "覚えた文から10問";
+  $("roadmap").innerHTML = LEVELS.map(L => {
+    const ids = PHRASES.filter(p => SCENES.find(s => s.id === p.s).lv === L.n);
+    const ok = ids.filter(p => prog[p.id] && prog[p.id].lv >= LEARNED_LV).length;
+    const seen = ids.filter(p => prog[p.id]).length;
+    const done = ok === ids.length;
+    return `<div class="lvl"><div class="n ${done ? "done" : ""}">${done ? "✓" : L.n}</div><div class="t">${L.name}<small>${L.desc}<br>${seen}/${ids.length}文に出会い、${ok}文を習得</small></div><div class="bar"><i style="width:${Math.round(ok / ids.length * 100)}%"></i></div></div>`;
+  }).join("");
+}
+
+/* =====================================================================
+   今日のレッスン（復習 → 新規を聞いてまねる → 新規を思い出す → 聞き取り）
+   ===================================================================== */
+let queue = [], qi = 0, sessionStats = { done: 0, good: 0, listenOk: 0, listenN: 0 }, lessonKind = "lesson";
+function startLesson() {
+  const due = dueIds();
+  const fresh = newIds(settings.newPerDay);
+  queue = [...due.map(id => ({ id, mode: "quiz", tag: "rev" })),
+           ...fresh.map(id => ({ id, mode: "intro", tag: "new" })),
+           ...fresh.map(id => ({ id, mode: "quiz", tag: "new" }))];
+  if (!queue.length) { toast("今日の分は終わっています。聞き取りクイズや数字ドリルで鍛えましょう"); return; }
+  shuffle([...new Set([...due, ...fresh])]).slice(0, 3).forEach(id => queue.push({ id, mode: "listen" }));
+  qi = 0; sessionStats = { done: 0, good: 0, listenOk: 0, listenN: 0 }; lessonKind = "lesson";
+  $("lessonTitle").textContent = "今日のレッスン";
+  showScreen("lesson");
+  renderLessonCard();
+}
+function renderLessonCard() {
+  if (qi >= queue.length) return finishLesson();
+  const q = queue[qi], p = findPhrase(q.id);
+  $("lessonBar").style.width = Math.round(qi / queue.length * 100) + "%";
+  $("lessonCount").textContent = `${qi + 1} / ${queue.length}`;
+  const card = $("lessonCard");
+  if (q.mode === "intro") {
+    card.innerHTML = `
+      <span class="chip new">あたらしい ｜ 聞いてまねる</span>
+      <p class="jp">${escapeHtml(p.jp)}</p>
+      <p class="en">${escapeHtml(getEn(p))}</p>
+      ${p.n ? `<p class="note">💡 ${escapeHtml(p.n)}</p>` : ""}
+      <div class="row"><button class="b-light" id="cSpeak">🔊 もう一度</button><button class="b-light" id="cSlow">🐢 ゆっくり</button></div>
+      <div class="row"><button class="b-mic" id="cMic">🎤 言ってみる</button></div>
+      <div class="result" id="cResult"></div>
+      <div class="row"><button class="b-blue" id="cNext">つぎへ →</button></div>`;
+    $("cSpeak").onclick = () => speak(getEn(p));
+    $("cSlow").onclick = () => speak(getEn(p), true);
+    $("cMic").onclick = () => listen($("cMic"), alts => renderResult($("cResult"), bestScore(getEn(p), alts)));
+    $("cNext").onclick = () => { qi++; renderLessonCard(); };
+    speak(getEn(p));
+  } else if (q.mode === "quiz") {
+    card.innerHTML = `
+      <span class="chip ${q.tag}">${q.tag === "new" ? "さっき覚えた" : "復習"} ｜ 英語で言ってみよう</span>
+      <p class="jp">${escapeHtml(p.jp)}</p>
+      <p class="en hidden" id="cEn">${escapeHtml(getEn(p))}</p>
+      <div class="row"><button class="b-mic" id="cMic">🎤 言ってみる</button><button class="b-gray" id="cShow">答えを見る</button></div>
+      <div class="result" id="cResult"></div>
+      <div id="cRate" style="display:none">
+        <p class="note" style="text-align:center">言えた？（正直に選ぶほど早く身につきます）</p>
+        <div class="row"><button class="b-gray" data-g="0">😣 まだ</button><button class="b-yellow" data-g="1">🙂 なんとか</button><button class="b-green" data-g="2">😄 バッチリ</button></div>
+      </div>`;
+    let revealed = false;
+    const reveal = () => { if (revealed) return; revealed = true; $("cEn").classList.remove("hidden"); $("cRate").style.display = "block"; speak(getEn(p)); };
+    $("cShow").onclick = reveal;
+    $("cMic").onclick = () => listen($("cMic"), alts => { renderResult($("cResult"), bestScore(getEn(p), alts)); reveal(); });
+    card.querySelectorAll("[data-g]").forEach(b => b.onclick = () => {
+      const g = Number(b.dataset.g);
+      if (lessonKind === "lesson") rate(p.id, g);
+      sessionStats.done++; if (g === 2) sessionStats.good++;
+      if (g === 0 && lessonKind === "lesson") queue.push({ id: p.id, mode: "quiz", tag: q.tag }); // 言えなかった文は最後にもう一度
+      qi++; renderLessonCard();
+    });
+  } else if (q.mode === "listen") {
+    renderListenCard(card, p, () => { qi++; renderLessonCard(); });
+  }
+}
+// 聞き取り：英語だけ聞いて意味を選ぶ
+function renderListenCard(card, p, onNext) {
+  const others = shuffle(PHRASES.filter(x => x.id !== p.id && x.jp !== p.jp)).slice(0, 3);
+  const choices = shuffle([p, ...others]);
+  card.innerHTML = `
+    <span class="chip lis">聞き取り ｜ 意味はどれ？</span>
+    <div class="bigear">👂</div>
+    <div class="row"><button class="b-light" id="lPlay">🔊 もう一度聞く</button><button class="b-light" id="lSlow">🐢 ゆっくり</button></div>
+    <div class="choices" id="lChoices">${choices.map(c => `<button data-id="${c.id}">${escapeHtml(c.jp)}</button>`).join("")}</div>
+    <p class="en" id="lEn" style="display:none"></p>
+    <div class="row" id="lNextRow" style="display:none"><button class="b-blue" id="lNext">つぎへ →</button></div>`;
+  $("lPlay").onclick = () => speak(getEn(p));
+  $("lSlow").onclick = () => speak(getEn(p), true);
+  let answered = false;
+  card.querySelectorAll("#lChoices button").forEach(b => b.onclick = () => {
+    if (answered) return; answered = true;
+    const ok = b.dataset.id === p.id;
+    b.classList.add(ok ? "ok" : "ng");
+    card.querySelector(`#lChoices [data-id="${p.id}"]`).classList.add("ok");
+    $("lEn").textContent = getEn(p); $("lEn").style.display = "block"; $("lNextRow").style.display = "flex";
+    sessionStats.listenN++; if (ok) sessionStats.listenOk++;
+    toast(ok ? "正解！" : "残念。正解は緑です");
+  });
+  $("lNext").onclick = onNext;
+  speak(getEn(p));
+}
+function finishLesson() {
+  if (lessonKind === "lesson") {
+    markStudied();
+    $("doneIcon").textContent = "🎉"; $("doneTitle").textContent = "今日のレッスン完了";
+    $("doneText").innerHTML = `今日は <b>${sessionStats.done}文</b> 練習しました。<br>バッチリ：${sessionStats.good}文　聞き取り：${sessionStats.listenOk}/${sessionStats.listenN}<br>連続 <b>${study.streak}日</b> 目 🔥<br><br>明日また10分。忘れかけたころに出てきます。`;
+  } else if (lessonKind === "listen") {
+    $("doneIcon").textContent = "👂"; $("doneTitle").textContent = "聞き取りクイズ 終了";
+    $("doneText").innerHTML = `正解 <b>${sessionStats.listenOk} / ${sessionStats.listenN}</b><br>${sessionStats.listenOk === sessionStats.listenN ? "全問正解！耳が育っています。" : "聞き取れなかった文は、場面フレーズでもう一度🔊。"}`;
+  } else if (lessonKind === "test") {
+    const sc = sessionStats.good, n = sessionStats.done, pct = Math.round(sc / n * 100);
+    const full = n === 10;
+    if (full && sc > study.bestTest) { study.bestTest = sc; saveAll(); }
+    $("doneIcon").textContent = pct >= 80 ? "🏆" : pct >= 50 ? "👍" : "💪"; $("doneTitle").textContent = "腕試しテスト 結果";
+    $("doneText").innerHTML = `<b style="font-size:1.6rem">${sc} / ${n}</b><br>${pct >= 80 ? "日常会話レベルに近づいています！" : pct >= 50 ? "半分は言えました。復習で固めましょう。" : "まだ定着前。今日のレッスンを続ければ必ず上がります。"}<br>${full ? `自己ベスト：${study.bestTest}/10` : "覚えた文が10文そろうと自己ベストが記録されます"}`;
+  }
+  showScreen("done", false);
+  screenStack.length = 0;
+}
+$("btnDoneHome").onclick = () => showScreen("home", false);
+$("btnLesson").onclick = startLesson;
+
+// 聞き取りクイズ（単独モード・10問）
+$("btnListen").onclick = () => {
+  const seen = allPhrases().filter(p => prog[p.id]);
+  const pool = seen.length >= 10 ? seen : PHRASES.filter(p => SCENES.find(s => s.id === p.s).lv <= 2);
+  queue = shuffle(pool).slice(0, 10).map(p => ({ id: p.id, mode: "listen" }));
+  qi = 0; sessionStats = { done: 0, good: 0, listenOk: 0, listenN: 0 }; lessonKind = "listen";
+  $("lessonTitle").textContent = "聞き取りクイズ";
+  showScreen("lesson"); renderLessonCard();
+};
+// 腕試しテスト（覚えた文から10問・記録には影響しない）
+$("btnTest").onclick = () => {
+  const seen = allPhrases().filter(p => prog[p.id]);
+  if (seen.length < 5) { toast("まず今日のレッスンで5文以上覚えてから挑戦しましょう"); return; }
+  queue = shuffle(seen).slice(0, 10).map(p => ({ id: p.id, mode: "quiz", tag: "rev" }));
+  qi = 0; sessionStats = { done: 0, good: 0, listenOk: 0, listenN: 0 }; lessonKind = "test";
+  $("lessonTitle").textContent = "腕試しテスト";
+  showScreen("lesson"); renderLessonCard();
+};
+
+/* =====================================================================
+   場面フレーズ
+   ===================================================================== */
+function renderScenes() {
+  let html = "";
+  LEVELS.forEach(L => {
+    html += `<div class="lvhead">レベル${L.n}　${L.name}</div>`;
+    SCENES.filter(s => s.lv === L.n).forEach(s => {
+      const ps = PHRASES.filter(p => p.s === s.id);
+      const ok = ps.filter(p => prog[p.id] && prog[p.id].lv >= LEARNED_LV).length;
+      html += `<div class="item scene" data-s="${s.id}"><span class="ic">${s.ic}</span><div class="txt"><div class="e" style="color:var(--text)">${s.name}</div><div class="j">${s.desc}</div></div><span class="cnt">${ok}/${ps.length}</span></div>`;
+    });
+  });
+  $("sceneList").innerHTML = html;
+  $("sceneList").querySelectorAll("[data-s]").forEach(el => el.onclick = () => openScene(el.dataset.s));
+}
+function openScene(sid) {
+  const s = SCENES.find(x => x.id === sid);
+  $("phrasesTitle").textContent = s.ic + " " + s.name;
+  renderPhraseList($("phraseList"), PHRASES.filter(p => p.s === sid));
+  showScreen("phrases");
+}
+function renderPhraseList(list, items, onDelete) {
+  list.innerHTML = items.map(p => {
+    const lv = prog[p.id] ? prog[p.id].lv : -1;
+    const mark = lv >= LEARNED_LV ? "◎" : lv >= 0 ? "○" : "";
+    return `<div class="item" data-id="${p.id}"><span class="mark">${mark}</span><div class="txt"><div class="e">${escapeHtml(getEn(p))}</div><div class="j">${escapeHtml(p.jp)}</div><div class="result" style="margin-top:6px;padding:8px 10px;font-size:.85rem"></div></div><button class="b-mic" data-label="🎤">🎤</button>${onDelete ? '<button class="b-gray del">🗑</button>' : ""}</div>`;
+  }).join("") || `<p class="hint-s">まだありません。</p>`;
+  list.querySelectorAll(".item").forEach(el => {
+    const p = findPhrase(el.dataset.id);
+    el.querySelector(".txt").onclick = () => speak(getEn(p));
+    const mic = el.querySelector(".b-mic");
+    mic.onclick = (e) => { e.stopPropagation(); listen(mic, alts => renderResult(el.querySelector(".result"), bestScore(getEn(p), alts))); };
+    const del = el.querySelector(".del");
+    if (del) del.onclick = () => onDelete(p.id);
+  });
+}
+$("btnScenes").onclick = () => { renderScenes(); showScreen("scenes"); };
+$("btnSurvival").onclick = () => openScene("help");
+
+/* =====================================================================
+   型トレーニング
+   ===================================================================== */
+function renderPatterns() {
+  $("patternList").innerHTML = PATTERNS.map((pt, i) =>
+    `<div class="item" data-i="${i}"><div class="txt"><div class="e">${escapeHtml(pt.en).replace("{}", '<span class="slot">＿＿</span>')}</div><div class="j">${escapeHtml(pt.jp)}</div></div><span>›</span></div>`).join("");
+  $("patternList").querySelectorAll("[data-i]").forEach(el => el.onclick = () => openPattern(Number(el.dataset.i)));
+}
+let ptIndex = 0, ptEx = 0;
+function openPattern(i) { ptIndex = i; ptEx = 0; renderPattern(); showScreen("pattern"); }
+function renderPattern() {
+  const pt = PATTERNS[ptIndex], [w, jp] = pt.ex[ptEx];
+  const en = pt.en.replace("{}", w);
+  $("patternTitle").textContent = "型 " + (ptIndex + 1) + " / " + PATTERNS.length;
+  $("patternCard").innerHTML = `
+    <span class="chip">${escapeHtml(pt.en.replace("{}", "…"))}</span>
+    <p class="jp">${escapeHtml(jp)}</p>
+    <p class="en">${escapeHtml(pt.en).replace("{}", `<span class="slot">${escapeHtml(w)}</span>`)}</p>
+    <div class="row"><button class="b-light" id="ptSpeak">🔊 聞く</button><button class="b-light" id="ptSlow">🐢 ゆっくり</button></div>
+    <div class="row"><button class="b-mic" id="ptMic">🎤 言ってみる</button></div>
+    <div class="result" id="ptResult"></div>
+    <div class="row"><button class="b-blue" id="ptNext">別の単語で →</button><button class="b-light" id="ptNextPt">次の型 →</button></div>
+    <p class="note">この型の入れ替え例：${pt.ex.map(e => escapeHtml(e[0])).join(" / ")}</p>`;
+  $("ptSpeak").onclick = () => speak(en);
+  $("ptSlow").onclick = () => speak(en, true);
+  $("ptMic").onclick = () => listen($("ptMic"), alts => renderResult($("ptResult"), bestScore(en, alts)));
+  $("ptNext").onclick = () => { ptEx = (ptEx + 1) % pt.ex.length; renderPattern(); };
+  $("ptNextPt").onclick = () => { ptIndex = (ptIndex + 1) % PATTERNS.length; ptEx = 0; renderPattern(); };
+  speak(en);
+}
+$("btnPatterns").onclick = () => { renderPatterns(); showScreen("patterns"); };
+
+/* =====================================================================
+   文法のツボ
+   ===================================================================== */
+$("btnGrammar").onclick = () => {
+  $("grammarList").innerHTML = GRAMMAR.map((g, i) => `<div class="item" data-i="${i}"><span class="mark">${i + 1}</span><div class="txt"><div class="e" style="color:var(--text)">${escapeHtml(g.t)}</div><div class="j">${escapeHtml(g.ex[0][0])}</div></div><span>›</span></div>`).join("");
+  $("grammarList").querySelectorAll("[data-i]").forEach(el => el.onclick = () => openGrammar(Number(el.dataset.i)));
+  showScreen("grammar");
+};
+function openGrammar(i) {
+  const g = GRAMMAR[i];
+  $("gramTitle").textContent = `ツボ ${i + 1} / ${GRAMMAR.length}`;
+  $("gramBody").innerHTML = `<h3>${escapeHtml(g.t)}</h3><p>${escapeHtml(g.body)}</p>
+    ${g.ex.map(e => `<div class="ex" data-en="${escapeHtml(e[0])}"><b>${escapeHtml(e[0])}</b> 🔊<span>${escapeHtml(e[1])}</span></div>`).join("")}
+    <div class="row">${i > 0 ? `<button class="b-light" id="gPrev">← 前</button>` : ""}${i < GRAMMAR.length - 1 ? `<button class="b-blue" id="gNext">次のツボ →</button>` : `<button class="b-blue" id="gEnd">一覧へ</button>`}</div>`;
+  $("gramBody").querySelectorAll(".ex").forEach(el => el.onclick = () => speak(el.dataset.en));
+  if ($("gPrev")) $("gPrev").onclick = () => openGrammar(i - 1);
+  if ($("gNext")) $("gNext").onclick = () => openGrammar(i + 1);
+  if ($("gEnd")) $("gEnd").onclick = goBack;
+  if (document.querySelector(".screen.show").id !== "grammarCard") showScreen("grammarCard");
+  window.scrollTo(0, 0);
+}
+
+/* =====================================================================
+   マイフレーズ
+   ===================================================================== */
+function renderMine() {
+  renderPhraseList($("mineList"), mine, (id) => { mine = mine.filter(m => m.id !== id); delete prog[id]; saveAll(); renderMine(); });
+}
+$("btnMine").onclick = () => { renderMine(); showScreen("mine"); };
+$("btnMineAdd").onclick = () => {
+  const jp = $("mineJp").value.trim(), en = $("mineEn").value.trim();
+  if (!jp || !en) { toast("日本語と英語の両方を入れてください"); return; }
+  mine.push({ id: "m" + Date.now(), s: "mine", en, jp });
+  saveAll(); $("mineJp").value = ""; $("mineEn").value = ""; renderMine(); toast("登録しました。今日のレッスンに出てきます");
+};
+$("btnMineAI").onclick = async () => {
+  const jp = $("mineJp").value.trim();
+  if (!jp) { toast("先に日本語を入れてください"); return; }
+  if (!settings.apiKey) { toast("⚙設定でGeminiのキーを入れると使えます"); return; }
+  $("btnMineAI").textContent = "翻訳中…";
+  try {
+    const r = await gemini("Translate the Japanese sentence into natural, simple spoken English (one sentence, as a Japanese adult learner would say it). Return ONLY JSON: {\"en\": \"...\"}", [{ role: "user", parts: [{ text: jp }] }]);
+    $("mineEn").value = r.en || "";
+  } catch (e) { toast("エラー: " + e.message); }
+  $("btnMineAI").textContent = "🤖 AIに英訳してもらう";
+};
+
+/* =====================================================================
+   数字ドリル
+   ===================================================================== */
+const ONES = ["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"];
+const TENS = ["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const ORD = ["","first","second","third","fourth","fifth","sixth","seventh","eighth","ninth","tenth","eleventh","twelfth","thirteenth","fourteenth","fifteenth","sixteenth","seventeenth","eighteenth","nineteenth","twentieth","twenty first","twenty second","twenty third","twenty fourth","twenty fifth","twenty sixth","twenty seventh","twenty eighth","twenty ninth","thirtieth","thirty first"];
+const below100 = (n) => n < 20 ? ONES[n] : TENS[Math.floor(n / 10)] + (n % 10 ? " " + ONES[n % 10] : "");
+function toWords(n) {
+  n = Math.floor(n);
+  if (n < 100) return below100(n);
+  if (n < 1000) return ONES[Math.floor(n / 100)] + " hundred" + (n % 100 ? " " + below100(n % 100) : "");
+  return toWords(Math.floor(n / 1000)) + " thousand" + (n % 1000 ? " " + toWords(n % 1000) : "");
+}
+function yearWords(y) {
+  const hi = Math.floor(y / 100), lo = y % 100;
+  if (y >= 2000 && y < 2010) return [`two thousand${lo ? " " + ONES[lo] : ""}`, `two thousand and ${ONES[lo]}`];
+  const t = [`${below100(hi)} ${lo < 10 ? "oh " + ONES[lo] : below100(lo)}`];
+  if (y >= 2010) t.push(`two thousand ${below100(lo)}`);
+  return t;
+}
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const NUM_KINDS = [
+  { id:"num", name:"数", make() { const n = [rnd(1, 20), rnd(21, 99), rnd(100, 999), rnd(1000, 9999)][rnd(0, 3)];
+      return { jp: n.toLocaleString(), targets: [toWords(n)], say: toWords(n) }; } },
+  { id:"price", name:"値段", make() { const d = rnd(1, 199), c = [0, 25, 50, 75, 99, rnd(1, 99)][rnd(0, 5)];
+      const w = toWords(d), cw = c ? below100(c) : "";
+      return { jp: `${d}ドル${c ? c + "セント" : ""}`, targets: c ? [`${w} ${cw}`, `${w} dollars and ${cw} cents`, `${w} dollars ${cw}`] : [`${w} dollars`, w], say: c ? `${w} ${cw}` : `${w} dollars` }; } },
+  { id:"time", name:"時刻", make() { const h = rnd(1, 12), m = [0, 5, 10, 15, 20, 30, 40, 45, 50, 55][rnd(0, 9)];
+      const hw = ONES[h], t = [], canon = m === 0 ? `${hw} o'clock` : m < 10 ? `${hw} oh ${ONES[m]}` : `${hw} ${below100(m)}`;
+      t.push(canon); if (m === 0) t.push(hw); if (m === 30) t.push(`half past ${hw}`); if (m === 15) t.push(`quarter past ${hw}`); if (m === 45) t.push(`quarter to ${ONES[h % 12 + 1]}`);
+      return { jp: `${h}時${m ? m + "分" : ""}`, targets: t, say: canon }; } },
+  { id:"year", name:"年", make() { const y = [rnd(1950, 1999), rnd(2000, 2009), rnd(2010, 2030)][rnd(0, 2)];
+      const t = yearWords(y); return { jp: `${y}年`, targets: t, say: t[0] }; } },
+  { id:"phone", name:"電話番号", make() { const d = "0" + rnd(7, 9) + "0" + String(rnd(1000, 9999)) + String(rnd(1000, 9999));
+      const w = d.split("").map(x => ONES[+x]).join(" ");
+      return { jp: d.slice(0, 3) + "-" + d.slice(3, 7) + "-" + d.slice(7), targets: [w, w.replace(/zero/g, "oh")], say: w }; } },
+  { id:"date", name:"日付", make() { const m = rnd(0, 11), d = rnd(1, 31);
+      return { jp: `${m + 1}月${d}日`, targets: [`${MONTHS[m]} ${ORD[d]}`, `${MONTHS[m]} ${below100(d)}`, `the ${ORD[d]} of ${MONTHS[m]}`], say: `${MONTHS[m]} ${ORD[d]}` }; } },
+];
+let numKind = 0;
+// 認識結果の「12.50」「3:45」「19th」を単語に直してから採点する
+function normNum(text, kind) {
+  let t = text.toLowerCase().replace(/\$/g, " ").replace(/:/g, " ").replace(/(\d)(st|nd|rd|th)\b/g, "$1").replace(/[-,]/g, " ");
+  t = t.replace(/\d+(\.\d+)?/g, m => {
+    if (kind === "phone") return m.replace(/\./g, "").split("").map(x => ONES[+x]).join(" ");
+    if (m.includes(".")) { const [a, b] = m.split("."); return toWords(+a) + " " + (+b ? below100(+b) : ""); }
+    if (kind === "year" && m.length === 4) return yearWords(+m)[0];
+    return toWords(+m);
+  });
+  return t;
+}
+function renderNumTabs() {
+  $("numTabs").innerHTML = NUM_KINDS.map((k, i) => `<button class="${i === numKind ? "on" : ""}" data-i="${i}">${k.name}</button>`).join("");
+  $("numTabs").querySelectorAll("button").forEach(b => b.onclick = () => { numKind = Number(b.dataset.i); renderNumTabs(); renderNum(); });
+}
+function renderNum() {
+  const k = NUM_KINDS[numKind], q = k.make();
+  $("numCard").innerHTML = `
+    <span class="chip">${k.name}を英語で</span>
+    <p class="en" style="font-size:2rem">${escapeHtml(q.jp)}</p>
+    <p class="note" id="nAns" style="display:none"></p>
+    <div class="row"><button class="b-mic" id="nMic">🎤 言ってみる</button><button class="b-gray" id="nShow">答えを聞く</button></div>
+    <div class="result" id="nResult"></div>
+    <div class="row"><button class="b-blue" id="nNext">次の問題 →</button></div>`;
+  const showAns = () => { $("nAns").textContent = "答え：" + q.say; $("nAns").style.display = "block"; speak(q.say); };
+  $("nShow").onclick = showAns;
+  $("nMic").onclick = () => listen($("nMic"), alts => { renderResult($("nResult"), bestScore(q.targets, alts.map(a => normNum(a, k.id)))); $("nAns").textContent = "答え：" + q.say; $("nAns").style.display = "block"; });
+  $("nNext").onclick = renderNum;
+}
+$("btnNumbers").onclick = () => { renderNumTabs(); renderNum(); showScreen("numbers"); };
+
+/* =====================================================================
+   Gemini 共通（自分のキー・JSONで返してもらう）
+   ===================================================================== */
+async function gemini(system, contents) {
+  const body = { systemInstruction: { parts: [{ text: system }] }, contents,
+    generationConfig: { responseMimeType: "application/json", maxOutputTokens: 4096, temperature: 0.8 } };
+  const res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + encodeURIComponent(settings.apiKey),
+    { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  if (!res.ok) throw new Error("HTTP " + res.status + (res.status === 400 || res.status === 403 ? "（キーが正しいか確認）" : res.status === 429 ? "（回数制限。少し待って）" : ""));
+  const data = await res.json();
+  const text = (((data.candidates || [])[0] || {}).content || {}).parts?.map(p => p.text).join("") || "";
+  try { return JSON.parse(text); } catch { return { reply: text }; }
+}
+
+/* =====================================================================
+   AI会話練習
+   ===================================================================== */
+let chatScene = null, chatHistory = [];
+function renderAiScenes() {
+  $("aiKeyWarn").style.display = settings.apiKey ? "none" : "block";
+  $("aiSceneList").innerHTML = AI_SCENES.map(s =>
+    `<div class="item scene" data-a="${s.id}"><span class="ic">${s.ic}</span><div class="txt"><div class="e" style="color:var(--text)">${s.name}</div><div class="j">${s.desc}</div></div><span>›</span></div>`).join("");
+  $("aiSceneList").querySelectorAll("[data-a]").forEach(el => el.onclick = () => {
+    if (!settings.apiKey) { toast("先に⚙設定でAPIキーを入れてください"); return; }
+    startChat(el.dataset.a);
+  });
+}
+function startChat(id) {
+  chatScene = AI_SCENES.find(s => s.id === id);
+  chatHistory = [];
+  $("chatTitle").textContent = chatScene.ic + " " + chatScene.name;
+  $("chatLog").innerHTML = ""; $("chatInput").value = "";
+  updateJpBtn();
+  showScreen("aiChat");
+  askAI(null);
+}
+function systemPrompt() {
+  return `You are ${chatScene.role}
+The user is a Japanese adult learning everyday English (beginner, CEFR A1-A2). Their name is ${settings.name || "Ken"}.
+Rules:
+- Reply in simple, natural spoken English. 1-2 short sentences. Always keep the conversation going with a question or a prompt.
+- Never switch to Japanese in "reply".
+- If the user's English has a mistake or sounds unnatural, put a corrected, natural version in "fix". If it is fine, set "fix" to null. Keep "fix" short and in English.
+- Stay in your role. Be warm and patient.
+Return ONLY JSON with these keys:
+{"reply": "<your English reply>", "jp": "<Japanese translation of reply>", "hint": "<one example sentence in English the user could say next>", "fix": <null or "<corrected version of the user's last message>">}`;
+}
+function addMsg(role, obj) {
+  const div = document.createElement("div");
+  div.className = "msg " + role;
+  if (role === "ai") {
+    const t = document.createElement("div"); t.textContent = obj.reply; div.appendChild(t);
+    const sp = document.createElement("button"); sp.className = "sp"; sp.textContent = "🔊"; sp.onclick = () => speak(obj.reply); div.appendChild(sp);
+    if (obj.jp) { const j = document.createElement("div"); j.className = "jp2"; j.textContent = obj.jp; j.style.display = settings.chatJp ? "" : "none"; div.appendChild(j); }
+    if (obj.hint) { const h = document.createElement("div"); h.className = "hint"; h.textContent = "💡 こう言ってみよう: " + obj.hint; div.appendChild(h); }
+  } else {
+    const t = document.createElement("div"); t.textContent = obj.text; div.appendChild(t);
+  }
+  $("chatLog").appendChild(div);
+  window.scrollTo(0, document.body.scrollHeight);
+  return div;
+}
+async function askAI(userText) {
+  let myDiv = null;
+  if (userText) { chatHistory.push({ role: "user", parts: [{ text: userText }] }); myDiv = addMsg("me", { text: userText }); }
+  const thinking = document.createElement("div"); thinking.className = "thinking"; thinking.textContent = "AIが考え中…"; $("chatLog").appendChild(thinking);
+  try {
+    const obj = await gemini(systemPrompt(), chatHistory.length ? chatHistory : [{ role: "user", parts: [{ text: "(The conversation starts. Please say your first line.)" }] }]);
+    thinking.remove();
+    if (myDiv && obj.fix && typeof obj.fix === "string" && norm(obj.fix).join(" ") !== norm(userText).join(" ")) {
+      const f = document.createElement("div"); f.className = "fix"; f.textContent = "✏️ より自然に: " + obj.fix; myDiv.appendChild(f);
+    }
+    chatHistory.push({ role: "model", parts: [{ text: JSON.stringify({ reply: obj.reply }) }] });
+    addMsg("ai", obj);
+    speak(obj.reply);
+  } catch (e) { thinking.textContent = "エラー: " + e.message; }
+}
+$("btnAI").onclick = () => { renderAiScenes(); showScreen("aiScenes"); };
+$("btnChatSend").onclick = () => { const t = $("chatInput").value.trim(); if (!t) return; $("chatInput").value = ""; askAI(t); };
+$("chatInput").addEventListener("keydown", e => { if (e.key === "Enter") $("btnChatSend").click(); });
+$("btnChatMic").dataset.label = "🎤";
+$("btnChatMic").onclick = () => listen($("btnChatMic"), alts => { $("chatInput").value = alts[0]; });
+function updateJpBtn() { $("btnChatJp").textContent = settings.chatJp ? "日本語 表示中" : "日本語 かくす"; document.querySelectorAll(".msg .jp2").forEach(j => j.style.display = settings.chatJp ? "" : "none"); }
+$("btnChatJp").onclick = () => { settings.chatJp = !settings.chatJp; saveAll(); updateJpBtn(); };
+
+/* =====================================================================
+   AI先生に質問
+   ===================================================================== */
+$("btnAsk").onclick = () => { $("askKeyWarn").style.display = settings.apiKey ? "none" : "block"; showScreen("ask"); };
+$("btnAskSend").onclick = async () => {
+  const q = $("askInput").value.trim();
+  if (!q) return;
+  if (!settings.apiKey) { toast("先に⚙設定でAPIキーを入れてください"); return; }
+  $("btnAskSend").textContent = "考え中…"; $("btnAskSend").disabled = true;
+  try {
+    const r = await gemini(`You are an English teacher for a Japanese adult beginner. The user writes what they want to say in Japanese.
+Return ONLY JSON: {"en": "<the most natural, simple spoken English>", "alts": ["<a more casual version>", "<a more polite version>"], "memo": "<one short tip in Japanese about a key word or nuance (max 60 characters)>"}`,
+      [{ role: "user", parts: [{ text: q }] }]);
+    const box = document.createElement("div"); box.className = "ans";
+    const qd = document.createElement("div"); qd.className = "q"; qd.textContent = q; box.appendChild(qd);
+    const a = document.createElement("div"); a.className = "a"; a.textContent = r.en || ""; box.appendChild(a);
+    (r.alts || []).forEach(x => { const d = document.createElement("div"); d.className = "alt"; d.textContent = "・" + x; box.appendChild(d); });
+    if (r.memo) { const m = document.createElement("div"); m.className = "memo"; m.textContent = "💡 " + r.memo; box.appendChild(m); }
+    const row = document.createElement("div"); row.className = "row";
+    const sp = document.createElement("button"); sp.className = "b-light"; sp.textContent = "🔊 聞く"; sp.onclick = () => speak(r.en); row.appendChild(sp);
+    const mic = document.createElement("button"); mic.className = "b-mic"; mic.textContent = "🎤 言ってみる"; row.appendChild(mic);
+    const add = document.createElement("button"); add.className = "b-blue"; add.textContent = "＋ マイフレーズに"; add.onclick = () => { mine.push({ id: "m" + Date.now(), s: "mine", en: r.en, jp: q }); saveAll(); toast("マイフレーズに登録しました"); add.disabled = true; }; row.appendChild(add);
+    box.appendChild(row);
+    const res = document.createElement("div"); res.className = "result"; box.appendChild(res);
+    mic.onclick = () => listen(mic, alts => renderResult(res, bestScore(r.en, alts)));
+    $("askLog").prepend(box);
+    speak(r.en);
+    $("askInput").value = "";
+  } catch (e) { toast("エラー: " + e.message); }
+  $("btnAskSend").textContent = "英語で何て言う？"; $("btnAskSend").disabled = false;
+};
+
+/* =====================================================================
+   設定
+   ===================================================================== */
+$("btnSettings").onclick = () => {
+  $("setName").value = settings.name;
+  $("setNew").value = settings.newPerDay;
+  $("setRate").value = settings.rate; $("rateVal").textContent = settings.rate;
+  $("setKey").value = settings.apiKey;
+  loadVoices();
+  showScreen("settings");
+};
+$("setName").onchange = () => { settings.name = $("setName").value.trim().replace(/[<>"']/g, "") || "Ken"; saveAll(); };
+$("setNew").onchange = () => { settings.newPerDay = Number($("setNew").value); saveAll(); };
+$("setRate").oninput = () => { settings.rate = Number($("setRate").value); $("rateVal").textContent = settings.rate; saveAll(); };
+$("setVoice").onchange = () => { settings.voice = $("setVoice").value; saveAll(); loadVoices(); };
+$("btnTestVoice").onclick = () => speak("Hi, how are you? Nice to meet you.");
+$("btnSaveKey").onclick = () => { settings.apiKey = $("setKey").value.trim(); saveAll(); toast(settings.apiKey ? "キーを保存しました" : "キーが空です"); };
+$("btnClearKey").onclick = () => { settings.apiKey = ""; $("setKey").value = ""; saveAll(); toast("キーを削除しました"); };
+$("btnReset").onclick = () => { if (confirm("覚えた記録と連続日数をすべて消します。よろしいですか？")) { prog = {}; study = { last: "", streak: 0, days: 0, bestTest: -1 }; saveAll(); toast("消しました"); } };
+
+/* =====================================================================
+   起動
+   ===================================================================== */
+renderHome();
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(() => {});
+</script>
+</body>
+</html>
