@@ -216,7 +216,7 @@ input[type=range] { width: 100%; margin-top: 8px; }
     </ol>
     <p style="margin:10px 0 0;font-size:.85rem;color:var(--muted)">目安：1日5文なら約2か月でレベル4まで到達。その後は復習＋AI会話で定着させます。</p>
   </div>
-  <p class="ver">v2.0</p>
+  <p class="ver">v2.0.1</p>
 </section>
 
 <!-- ============================ レッスン ============================ -->
@@ -1252,8 +1252,9 @@ $("btnNumbers").onclick = () => { renderNumTabs(); renderNum(); showScreen("numb
 async function gemini(system, contents) {
   const body = { systemInstruction: { parts: [{ text: system }] }, contents,
     generationConfig: { responseMimeType: "application/json", maxOutputTokens: 4096, temperature: 0.8 } };
-  const res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + encodeURIComponent(settings.apiKey),
-    { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  // キーはアドレスに付けず、見出し（ヘッダー）で送る。アドレスは記録に残りやすいため
+  const res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+    { method: "POST", headers: { "Content-Type": "application/json", "x-goog-api-key": settings.apiKey }, body: JSON.stringify(body) });
   if (!res.ok) throw new Error("HTTP " + res.status + (res.status === 400 || res.status === 403 ? "（キーが正しいか確認）" : res.status === 429 ? "（回数制限。少し待って）" : ""));
   const data = await res.json();
   const text = (((data.candidates || [])[0] || {}).content || {}).parts?.map(p => p.text).join("") || "";
